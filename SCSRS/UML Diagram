@@ -1,0 +1,36 @@
+com.scsrs
+      │
+      ├── users
+      ├── reports
+      ├── services
+      ├── storage
+      ├── utils
+      └── app
+
+      ----------------------------------------
+      |               User                   |
+      ----------------------------------------
+      | - userId : int                       |
+      | - firstName : String                 |
+      | - lastName : String                  |
+      | - email : String                     |
+      | - password : String                  |
+      | - phoneNumber : String               |
+      ----------------------------------------
+      | + User(...)                          |
+      | + getUserId() : int                  |
+      | + setUserId() : void                 |
+      | + getFirstName() : String            |
+      | + setFirstName() : void              |
+      | + getLastName() : String             |
+      | + setLastName() : void               |
+      | + getEmail() : String                |
+      | + setEmail() : void                  |
+      | + getPassword() : String             |
+      | + setPassword() : void               |
+      | + getPhoneNumber() : String          |
+      | + setPhoneNumber() : void            |
+      | + login() : void                     |
+      | + logout() : void                    |
+      | + toString() : String                |
+      ----------------------------------------
