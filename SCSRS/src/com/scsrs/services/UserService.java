@@ -30,6 +30,10 @@ public class UserService {
     // Methods
     // ==========================
 
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
     /**
      * Adds a new user.
      *

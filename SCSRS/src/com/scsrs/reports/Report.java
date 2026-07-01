@@ -97,6 +97,6 @@ public class Report {
                 "\nDescription: " + description +
                 "\nCategory: " + category +
                 "\nStatus: " + status +
-                "\nResident: " + resident.getFullName();
+                "\nSubmitted by : " + resident.getFullName();
     }
 }

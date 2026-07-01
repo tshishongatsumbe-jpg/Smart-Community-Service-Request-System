@@ -29,6 +29,10 @@ public class ReportService {
     // Methods
     // ==========================
 
+    public ArrayList<Report> getReports() {
+        return reports;
+    }
+
     /**
      * Adds a new report to the system.
      *

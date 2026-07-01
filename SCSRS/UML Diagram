@@ -69,3 +69,8 @@ com.scsrs
                   └── utils
                          Validation.java
 
+com.scsrs.enums
+│
+├── ReportStatus.java
+│
+└── ReportCategory.java
