@@ -1,4 +1,4 @@
-package coscsrs.users;
+package com.scsrs.users;
 
 /**
  * Represents a Field Worker in the Smart Community Service Request System.

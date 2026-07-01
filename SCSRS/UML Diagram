@@ -34,3 +34,38 @@ com.scsrs
       | + logout() : void                    |
       | + toString() : String                |
       ----------------------------------------
+
+
+      SmartCommunityServiceRequestSystem
+      │
+      └── src
+          │
+          └── com
+              │
+              └── scsrs
+                  │
+                  ├── app
+                  │      Main.java
+                  │
+                  ├── users
+                  │      User.java
+                  │      Resident.java
+                  │      Administrator.java
+                  │      FieldWorker.java
+                  │
+                  ├── reports
+                  │      Report.java
+                  │      ReportStatus.java
+                  │      Category.java
+                  │
+                  ├── services
+                  │      UserService.java
+                  │      ReportService.java
+                  │      AuthenticationService.java
+                  │
+                  ├── storage
+                  │      FileManager.java
+                  │
+                  └── utils
+                         Validation.java
+

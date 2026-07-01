@@ -1,4 +1,4 @@
-package coscsrs.users;
+package com.scsrs.users;
 
 /**
  * Represents a resident who can submit and track community service requests.

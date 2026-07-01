@@ -1,6 +1,6 @@
-package coscsrs.users;
+package com.scsrs.users;
 
-    /**
+/**
      * Represents an Administrator in the Smart Community Service Request System.
      * An Administrator manages reports and assigns work to field workers.
      *
