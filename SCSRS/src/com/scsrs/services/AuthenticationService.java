@@ -2,44 +2,61 @@ package com.scsrs.services;
 
 import com.scsrs.users.User;
 
+import java.util.ArrayList;
+
 /**
- * Provides authentication services for users.
+ * Handles user authentication.
  *
  * @author Shonisani
- * @version 1.0
+ * @version 2.0
  */
 public class AuthenticationService {
 
+    // ==========================
+    // Attributes
+    // ==========================
+
+    private final UserService userService;
+
+    // ==========================
+    // Constructor
+    // ==========================
+
     /**
-     * Authenticates a user using their email and password.
+     * Creates a new AuthenticationService.
      *
-     * @param user The user attempting to log in.
-     * @param email The entered email.
-     * @param password The entered password.
-     * @return true if the credentials are correct, otherwise false.
+     * @param userService The user service used to access registered users.
      */
-    public boolean login(User user, String email, String password) {
-
-        if (user.getEmail().equals(email)
-                && user.getPassword().equals(password)) {
-
-            System.out.println("Login successful.");
-            return true;
-        }
-
-        System.out.println("Invalid email or password.");
-        return false;
+    public AuthenticationService(UserService userService) {
+        this.userService = userService;
     }
 
+    // ==========================
+    // Methods
+    // ==========================
+
     /**
-     * Logs the user out.
+     * Authenticates a user.
      *
-     * @param user The user logging out.
+     * @param email User email.
+     * @param password User password.
+     * @return Matching User if login succeeds, otherwise null.
      */
-    public void logout(User user) {
+    public User login(String email, String password) {
 
-        System.out.println(user.getFullName() + " has logged out.");
+        ArrayList<User> users = userService.getUsers();
 
+        for (User user : users) {
+
+            if (user.getEmail().equalsIgnoreCase(email)
+                    && user.getPassword().equals(password)) {
+
+                return user;
+            }
+
+        }
+
+        return null;
     }
 
 }

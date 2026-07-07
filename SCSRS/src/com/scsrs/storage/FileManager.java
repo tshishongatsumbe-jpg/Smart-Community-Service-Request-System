@@ -8,18 +8,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Handles saving application data to files.
+ * Handles file operations for the
+ * Smart Community Service Request System.
  *
  * @author Shonisani
- * @version 1.0
+ * @version 2.0
  */
 public class FileManager {
 
     /**
      * Saves all reports to a text file.
      *
-     * @param reports The list of reports.
-     * @param fileName The name of the file.
+     * @param reports List of reports.
+     * @param fileName Name of the file.
      */
     public void saveReports(ArrayList<Report> reports, String fileName) {
 
@@ -27,35 +28,21 @@ public class FileManager {
 
             for (Report report : reports) {
 
-                writer.write("Report ID: " + report.getReportId());
+                writer.write(report.toString());
+                writer.newLine();
+                writer.write("----------------------------------------");
                 writer.newLine();
 
-                writer.write("Title: " + report.getTitle());
-                writer.newLine();
-
-                writer.write("Description: " + report.getDescription());
-                writer.newLine();
-
-                writer.write("Category: " + report.getCategory());
-                writer.newLine();
-
-                writer.write("Status: " + report.getStatus());
-                writer.newLine();
-
-                writer.write("Resident: " + report.getResident().getFullName());
-                writer.newLine();
-
-                writer.write("----------------------------------");
-                writer.newLine();
             }
 
-            System.out.println("Reports saved successfully.");
+            System.out.println("\nReports saved successfully to " + fileName);
 
         } catch (IOException e) {
 
             System.out.println("Error saving reports: " + e.getMessage());
 
         }
+
     }
 
 }

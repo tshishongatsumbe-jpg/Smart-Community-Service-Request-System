@@ -74,3 +74,9 @@ com.scsrs.enums
 ├── ReportStatus.java
 │
 └── ReportCategory.java
+
+com.scsrs.menu
+│
+├── AdministratorMenu.java
+├── ResidentMenu.java
+└── FieldWorkerMenu.java

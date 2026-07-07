@@ -5,13 +5,14 @@ package com.scsrs.users;
  * This is the parent class for Resident, Administrator, and FieldWorker.
  *
  * @author Shonisani
- * @version 1.0
+ * @version 2.0
  */
 public class User {
 
     // ==========================
     // Attributes
     // ==========================
+
     private int userId;
     private String firstName;
     private String lastName;
@@ -22,8 +23,23 @@ public class User {
     // ==========================
     // Constructor
     // ==========================
-    public User(int userId, String firstName, String lastName,
-                String email, String password, String phoneNumber) {
+
+    /**
+     * Creates a new User.
+     *
+     * @param userId Unique user ID.
+     * @param firstName User's first name.
+     * @param lastName User's last name.
+     * @param email User's email address.
+     * @param password User's password.
+     * @param phoneNumber User's phone number.
+     */
+    public User(int userId,
+                String firstName,
+                String lastName,
+                String email,
+                String password,
+                String phoneNumber) {
 
         this.userId = userId;
         this.firstName = firstName;
@@ -61,6 +77,10 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -89,22 +109,38 @@ public class User {
     // Methods
     // ==========================
 
+    /**
+     * Simulates user login.
+     */
     public void login() {
-        System.out.println(firstName + " has logged in.");
+        System.out.println(getFullName() + " has logged in.");
     }
 
+    /**
+     * Simulates user logout.
+     */
     public void logout() {
-        System.out.println(firstName + " has logged out.");
+        System.out.println(getFullName() + " has logged out.");
     }
-    public String getFullName(){
-        return firstName + " , " +  lastName;
+
+    /**
+     * Displays the user's role.
+     * Child classes override this method.
+     */
+    public void displayRole() {
+        System.out.println("Role: User");
     }
+
+    // ==========================
+    // toString()
+    // ==========================
 
     @Override
     public String toString() {
+
         return "User ID: " + userId +
-                "\nName: " + firstName + " " + lastName +
+                "\nName: " + getFullName() +
                 "\nEmail: " + email +
-                "\nPhone: " + phoneNumber;
+                "\nPhone Number: " + phoneNumber;
     }
 }

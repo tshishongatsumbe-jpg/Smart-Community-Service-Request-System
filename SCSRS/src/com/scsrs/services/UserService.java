@@ -1,6 +1,7 @@
 package com.scsrs.services;
 
 import com.scsrs.users.User;
+
 import java.util.ArrayList;
 
 /**
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  * Smart Community Service Request System.
  *
  * @author Shonisani
- * @version 1.0
+ * @version 2.0
  */
 public class UserService {
 
@@ -16,52 +17,55 @@ public class UserService {
     // Attributes
     // ==========================
 
-    private ArrayList<User> users;
+    private final ArrayList<User> users;
 
     // ==========================
     // Constructor
     // ==========================
 
+    /**
+     * Creates a new UserService.
+     */
     public UserService() {
         users = new ArrayList<>();
+    }
+
+    // ==========================
+    // Getters
+    // ==========================
+
+    /**
+     * Returns all registered users.
+     *
+     * @return List of users.
+     */
+    public ArrayList<User> getUsers() {
+        return users;
     }
 
     // ==========================
     // Methods
     // ==========================
 
-    public ArrayList<User> getUsers() {
-        return users;
-    }
-
     /**
-     * Adds a new user.
+     * Adds a new user to the system.
      *
      * @param user The user to add.
+     * @return true if the user was added successfully,
+     *         false if the User ID already exists.
      */
-    public void addUser(User user) {
+    public boolean addUser(User user) {
+
+        if (searchUser(user.getUserId()) != null) {
+            return false;
+        }
+
         users.add(user);
+        return true;
     }
 
     /**
-     * Displays all users.
-     */
-    public void viewAllUsers() {
-
-        if (users.isEmpty()) {
-            System.out.println("No users found.");
-            return;
-        }
-
-        for (User user : users) {
-            System.out.println(user);
-            System.out.println("----------------------------");
-        }
-
-    }
-
-    /**
-     * Searches for a user by ID.
+     * Searches for a user using their ID.
      *
      * @param userId The user ID.
      * @return The matching user or null if not found.
@@ -80,21 +84,47 @@ public class UserService {
     }
 
     /**
+     * Displays all registered users.
+     */
+    public void viewAllUsers() {
+
+        if (users.isEmpty()) {
+            System.out.println("No users registered.");
+            return;
+        }
+
+        for (User user : users) {
+            System.out.println(user);
+            System.out.println("----------------------------");
+        }
+    }
+
+    /**
+     * Returns the total number of users.
+     *
+     * @return Number of registered users.
+     */
+    public int getTotalUsers() {
+        return users.size();
+    }
+
+    /**
      * Removes a user from the system.
      *
-     * @param userId The user ID.
+     * @param userId The ID of the user to remove.
+     * @return true if the user was removed successfully,
+     *         false if the user was not found.
      */
-    public void removeUser(int userId) {
+    public boolean removeUser(int userId) {
 
         User user = searchUser(userId);
 
         if (user != null) {
             users.remove(user);
-            System.out.println("User removed successfully.");
-        } else {
-            System.out.println("User not found.");
+            return true;
         }
 
+        return false;
     }
 
 }

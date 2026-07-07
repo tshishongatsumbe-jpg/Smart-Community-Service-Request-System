@@ -1,30 +1,51 @@
 package com.scsrs.reports;
 
+import com.scsrs.enums.ReportCategory;
+import com.scsrs.enums.ReportStatus;
 import com.scsrs.users.Resident;
+import com.scsrs.users.FieldWorker;
+
 
 /**
  * Represents a community service request submitted by a resident.
  *
  * @author Shonisani
- * @version 1.0
+ * @version 2.0
  */
 public class Report {
 
     // ==========================
     // Attributes
     // ==========================
+
     private int reportId;
     private String title;
     private String description;
-    private String category;
-    private String status;
+    private ReportCategory category;
+    private ReportStatus status;
     private Resident resident;
+    private FieldWorker assignedWorker;
 
     // ==========================
     // Constructor
     // ==========================
-    public Report(int reportId, String title, String description,
-                  String category, String status, Resident resident) {
+
+    /**
+     * Creates a new community service report.
+     *
+     * @param reportId Unique report ID.
+     * @param title Report title.
+     * @param description Detailed description of the issue.
+     * @param category Category of the report.
+     * @param status Current report status.
+     * @param resident Resident who submitted the report.
+     */
+    public Report(int reportId,
+                  String title,
+                  String description,
+                  ReportCategory category,
+                  ReportStatus status,
+                  Resident resident) {
 
         this.reportId = reportId;
         this.title = title;
@@ -32,6 +53,7 @@ public class Report {
         this.category = category;
         this.status = status;
         this.resident = resident;
+        this.assignedWorker = null;
     }
 
     // ==========================
@@ -62,19 +84,19 @@ public class Report {
         this.description = description;
     }
 
-    public String getCategory() {
+    public ReportCategory getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ReportCategory category) {
         this.category = category;
     }
 
-    public String getStatus() {
+    public ReportStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ReportStatus status) {
         this.status = status;
     }
 
@@ -85,6 +107,25 @@ public class Report {
     public void setResident(Resident resident) {
         this.resident = resident;
     }
+    public FieldWorker getAssignedWorker() {
+        return assignedWorker;
+    }
+    public void setAssignedWorker(FieldWorker assignedWorker) {
+        this.assignedWorker = assignedWorker;
+    }
+
+    // ==========================
+    // Business Methods
+    // ==========================
+
+    /**
+     * Checks whether the report has been resolved.
+     *
+     * @return true if the report is resolved; otherwise false.
+     */
+    public boolean isResolved() {
+        return status == ReportStatus.RESOLVED;
+    }
 
     // ==========================
     // toString()
@@ -92,11 +133,17 @@ public class Report {
 
     @Override
     public String toString() {
+
+        String workerName = assignedWorker == null
+                ? "Not Assigned"
+                : assignedWorker.getFullName();
+
         return "Report ID: " + reportId +
                 "\nTitle: " + title +
                 "\nDescription: " + description +
                 "\nCategory: " + category +
                 "\nStatus: " + status +
-                "\nSubmitted by : " + resident.getFullName();
+                "\nSubmitted By: " + resident.getFullName() +
+                "\nAssigned Worker: " + workerName;
     }
 }
