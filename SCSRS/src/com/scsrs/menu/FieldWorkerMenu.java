@@ -47,9 +47,9 @@ public class FieldWorkerMenu {
         do {
 
             System.out.println("\n========== Field Worker Menu ==========");
-            System.out.println("1. View All Reports");
-            System.out.println("2. Search Report");
-            System.out.println("3. Update Report Status");
+            System.out.println("1. View My Assigned Reports");
+            System.out.println("2. Mark Report as Resolved");
+            System.out.println("3. View All Reports");
             System.out.println("4. Logout");
             System.out.println("=======================================");
 
@@ -60,15 +60,15 @@ public class FieldWorkerMenu {
             switch (choice) {
 
                 case 1:
-                    viewReports();
+                    viewAssignedReports();
                     break;
 
                 case 2:
-                    searchReport();
+                    resolveReport();
                     break;
 
                 case 3:
-                    updateReportStatus();
+                    viewAllReports();
                     break;
 
                 case 4:
@@ -84,51 +84,41 @@ public class FieldWorkerMenu {
     }
 
     // ==========================
-    // View Reports
+    // View Assigned Reports
     // ==========================
 
-    private void viewReports() {
+    private void viewAssignedReports() {
 
-        System.out.println("\n===== Community Service Reports =====");
+        System.out.println("\n===== My Assigned Reports =====");
 
-        reportService.viewAllReports();
+        boolean found = false;
 
-    }
+        for (Report report : reportService.getReports()) {
 
-    // ==========================
-    // Search Report
-    // ==========================
+            if (report.getAssignedWorker() != null
+                    && report.getAssignedWorker().getUserId()
+                    == fieldWorker.getUserId()) {
 
-    private void searchReport() {
+                System.out.println(report);
+                System.out.println("----------------------------");
+                found = true;
+            }
 
-        System.out.println("\n===== Search Report =====");
+        }
 
-        System.out.print("Enter Report ID: ");
-        int reportId = scanner.nextInt();
-        scanner.nextLine();
-
-        Report report = reportService.searchReport(reportId);
-
-        if (report != null) {
-
-            System.out.println("\n===== Report Found =====");
-            System.out.println(report);
-
-        } else {
-
-            System.out.println("Report not found.");
-
+        if (!found) {
+            System.out.println("No reports assigned.");
         }
 
     }
 
     // ==========================
-    // Update Report Status
+    // Resolve Report
     // ==========================
 
-    private void updateReportStatus() {
+    private void resolveReport() {
 
-        System.out.println("\n===== Update Report Status =====");
+        System.out.println("\n===== Resolve Report =====");
 
         System.out.print("Enter Report ID: ");
         int reportId = scanner.nextInt();
@@ -137,55 +127,42 @@ public class FieldWorkerMenu {
         Report report = reportService.searchReport(reportId);
 
         if (report == null) {
-
             System.out.println("Report not found.");
             return;
-
         }
 
-        System.out.println("\nCurrent Status: " + report.getStatus());
-
-        System.out.println("\nSelect New Status");
-        System.out.println("1. Open");
-        System.out.println("2. In Progress");
-        System.out.println("3. Resolved");
-
-        System.out.print("Choice: ");
-        int option = scanner.nextInt();
-        scanner.nextLine();
-
-        ReportStatus newStatus;
-
-        switch (option) {
-
-            case 1:
-                newStatus = ReportStatus.OPEN;
-                break;
-
-            case 2:
-                newStatus = ReportStatus.IN_PROGRESS;
-                break;
-
-            case 3:
-                newStatus = ReportStatus.RESOLVED;
-                break;
-
-            default:
-                System.out.println("Invalid status.");
-                return;
+        if (report.getAssignedWorker() == null) {
+            System.out.println("This report has not been assigned.");
+            return;
         }
 
-        if (reportService.updateReportStatus(reportId, newStatus)) {
+        if (report.getAssignedWorker().getUserId() != fieldWorker.getUserId()) {
+            System.out.println("This report is assigned to another field worker.");
+            return;
+        }
 
-            System.out.println("\nReport status updated successfully!");
+        if (reportService.updateReportStatus(reportId, ReportStatus.RESOLVED)) {
+
+            System.out.println("Report marked as resolved.");
 
         } else {
 
-            System.out.println("\nFailed to update report.");
+            System.out.println("Unable to update report.");
 
         }
 
     }
 
+    // ==========================
+    // View All Reports
+    // ==========================
+
+    private void viewAllReports() {
+
+        System.out.println("\n===== All Community Reports =====");
+
+        reportService.viewAllReports();
+
+    }
 
 }

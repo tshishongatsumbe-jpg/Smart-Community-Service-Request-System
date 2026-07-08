@@ -48,7 +48,7 @@ public class AdministratorMenu {
     }
 
     // ==========================
-    // Menu
+    // Administrator Menu
     // ==========================
 
     public void showMenu() {
@@ -150,7 +150,7 @@ public class AdministratorMenu {
         String email = scanner.nextLine();
 
         if (!validation.isValidEmail(email)) {
-            System.out.println("Invalid email address.");
+            System.out.println("Invalid email.");
             return;
         }
 
@@ -158,7 +158,7 @@ public class AdministratorMenu {
         String password = scanner.nextLine();
 
         if (!validation.isValidPassword(password)) {
-            System.out.println("Password must contain at least 6 characters.");
+            System.out.println("Password must be at least 6 characters.");
             return;
         }
 
@@ -166,7 +166,7 @@ public class AdministratorMenu {
         String phoneNumber = scanner.nextLine();
 
         if (!validation.isValidPhoneNumber(phoneNumber)) {
-            System.out.println("Phone number must contain exactly 10 digits.");
+            System.out.println("Invalid phone number.");
             return;
         }
 
@@ -180,9 +180,9 @@ public class AdministratorMenu {
         );
 
         if (userService.addUser(resident)) {
-            System.out.println("\nResident registered successfully!");
+            System.out.println("Resident registered successfully.");
         } else {
-            System.out.println("\nRegistration failed.");
+            System.out.println("Registration failed.");
         }
     }
 
@@ -193,7 +193,6 @@ public class AdministratorMenu {
     private void viewAllUsers() {
 
         System.out.println("\n===== Registered Users =====");
-
         userService.viewAllUsers();
     }
 
@@ -204,7 +203,6 @@ public class AdministratorMenu {
     private void viewReports() {
 
         System.out.println("\n===== Community Reports =====");
-
         reportService.viewAllReports();
     }
 
@@ -214,8 +212,6 @@ public class AdministratorMenu {
 
     private void searchReport() {
 
-        System.out.println("\n===== Search Report =====");
-
         System.out.print("Enter Report ID: ");
         int reportId = scanner.nextInt();
         scanner.nextLine();
@@ -223,14 +219,9 @@ public class AdministratorMenu {
         Report report = reportService.searchReport(reportId);
 
         if (report != null) {
-
-            System.out.println("\n===== Report Found =====");
             System.out.println(report);
-
         } else {
-
             System.out.println("Report not found.");
-
         }
     }
 
@@ -240,8 +231,6 @@ public class AdministratorMenu {
 
     private void updateReportStatus() {
 
-        System.out.println("\n===== Update Report Status =====");
-
         System.out.print("Enter Report ID: ");
         int reportId = scanner.nextInt();
         scanner.nextLine();
@@ -253,41 +242,39 @@ public class AdministratorMenu {
             return;
         }
 
-        System.out.println("\nCurrent Status: " + report.getStatus());
-
-        System.out.println("1. Open");
-        System.out.println("2. In Progress");
-        System.out.println("3. Resolved");
+        System.out.println("1. OPEN");
+        System.out.println("2. IN_PROGRESS");
+        System.out.println("3. RESOLVED");
 
         System.out.print("Choice: ");
-        int option = scanner.nextInt();
+        int choice = scanner.nextInt();
         scanner.nextLine();
 
-        ReportStatus newStatus;
+        ReportStatus status;
 
-        switch (option) {
+        switch (choice) {
 
             case 1:
-                newStatus = ReportStatus.OPEN;
+                status = ReportStatus.OPEN;
                 break;
 
             case 2:
-                newStatus = ReportStatus.IN_PROGRESS;
+                status = ReportStatus.IN_PROGRESS;
                 break;
 
             case 3:
-                newStatus = ReportStatus.RESOLVED;
+                status = ReportStatus.RESOLVED;
                 break;
 
             default:
-                System.out.println("Invalid status.");
+                System.out.println("Invalid choice.");
                 return;
         }
 
-        if (reportService.updateReportStatus(reportId, newStatus)) {
-            System.out.println("Report status updated successfully!");
+        if (reportService.updateReportStatus(reportId, status)) {
+            System.out.println("Report updated successfully.");
         } else {
-            System.out.println("Failed to update report.");
+            System.out.println("Update failed.");
         }
     }
 
@@ -297,8 +284,6 @@ public class AdministratorMenu {
 
     private void assignReport() {
 
-        System.out.println("\n===== Assign Report =====");
-
         System.out.print("Enter Report ID: ");
         int reportId = scanner.nextInt();
         scanner.nextLine();
@@ -308,6 +293,16 @@ public class AdministratorMenu {
         if (report == null) {
             System.out.println("Report not found.");
             return;
+        }
+
+        System.out.println("\nAvailable Field Workers");
+
+        for (User user : userService.getUsers()) {
+
+            if (user instanceof FieldWorker) {
+                System.out.println(user);
+                System.out.println("--------------------");
+            }
         }
 
         System.out.print("Enter Field Worker ID: ");
@@ -324,10 +319,9 @@ public class AdministratorMenu {
         FieldWorker worker = (FieldWorker) user;
 
         if (reportService.assignReport(reportId, worker)) {
-            System.out.println("Report assigned successfully to " +
-                    worker.getFullName());
+            System.out.println("Report assigned to " + worker.getFullName());
         } else {
-            System.out.println("Failed to assign report.");
+            System.out.println("Assignment failed.");
         }
     }
 
@@ -337,14 +331,11 @@ public class AdministratorMenu {
 
     private void saveReports() {
 
-        System.out.println("\n===== Save Reports =====");
-
         fileManager.saveReports(
                 reportService.getReports(),
                 "reports.txt"
         );
 
-        System.out.println("Reports saved successfully!");
+        System.out.println("Reports saved successfully.");
     }
-
 }

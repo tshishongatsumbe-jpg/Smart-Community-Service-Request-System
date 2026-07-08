@@ -6,25 +6,6 @@ import com.scsrs.reports.Report;
 import com.scsrs.services.ReportService;
 import com.scsrs.services.UserService;
 import com.scsrs.users.Resident;
-import com.scsrs.users.User;
-
-/**
- * A resident can:
- *
- * ✅ Submit a report
- * ✅ Search for a report
- * ✅ View all reports
- * ✅ Logout
- *
- *
- A resident cannot:
-        *
-        * ❌ Register users
-        * ❌ Update report status
-        * ❌ Save reports
-        * ❌ Manage users
- *
- */
 
 import java.util.Scanner;
 
@@ -61,7 +42,7 @@ public class ResidentMenu {
     }
 
     // ==========================
-    // Resident Menu
+    // Menu
     // ==========================
 
     public void showMenu() {
@@ -72,8 +53,8 @@ public class ResidentMenu {
 
             System.out.println("\n========== Resident Menu ==========");
             System.out.println("1. Submit Report");
-            System.out.println("2. Search Report");
-            System.out.println("3. View All Reports");
+            System.out.println("2. View All Reports");
+            System.out.println("3. Search Report");
             System.out.println("4. Logout");
             System.out.println("===================================");
 
@@ -88,11 +69,11 @@ public class ResidentMenu {
                     break;
 
                 case 2:
-                    searchReport();
+                    viewReports();
                     break;
 
                 case 3:
-                    viewReports();
+                    searchReport();
                     break;
 
                 case 4:
@@ -104,7 +85,6 @@ public class ResidentMenu {
             }
 
         } while (choice != 4);
-
     }
 
     // ==========================
@@ -130,7 +110,7 @@ public class ResidentMenu {
         System.out.print("Enter Description: ");
         String description = scanner.nextLine();
 
-        System.out.println("\nSelect Report Category");
+        System.out.println("\nSelect Category");
         System.out.println("1. Water");
         System.out.println("2. Electricity");
         System.out.println("3. Roads");
@@ -202,9 +182,9 @@ public class ResidentMenu {
 
     private void viewReports() {
 
-        System.out.println("\n===== Community Service Reports =====");
-
+        System.out.println("\n===== Community Reports =====");
         reportService.viewAllReports();
+
     }
 
     // ==========================
@@ -213,8 +193,6 @@ public class ResidentMenu {
 
     private void searchReport() {
 
-        System.out.println("\n===== Search Report =====");
-
         System.out.print("Enter Report ID: ");
         int reportId = scanner.nextInt();
         scanner.nextLine();
@@ -222,10 +200,14 @@ public class ResidentMenu {
         Report report = reportService.searchReport(reportId);
 
         if (report != null) {
+
             System.out.println("\n===== Report Found =====");
             System.out.println(report);
+
         } else {
+
             System.out.println("Report not found.");
+
         }
 
     }

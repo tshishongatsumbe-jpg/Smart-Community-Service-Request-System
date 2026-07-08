@@ -136,6 +136,10 @@ public class ReportService {
             return false;
         }
 
+        if (report.getAssignedWorker() != null) {
+            return false;
+        }
+
         report.setAssignedWorker(worker);
         return true;
     }
