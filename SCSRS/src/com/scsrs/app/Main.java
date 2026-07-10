@@ -68,6 +68,12 @@ public class Main {
             System.out.println("====================================");
             System.out.print("Choice: ");
 
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine();
+                continue;
+            }
+
             int choice = scanner.nextInt();
             scanner.nextLine();
 

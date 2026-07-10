@@ -42,7 +42,7 @@ public class FieldWorkerMenu {
 
     public void showMenu() {
 
-        int choice;
+        int choice = 0;
 
         do {
 
@@ -54,6 +54,13 @@ public class FieldWorkerMenu {
             System.out.println("=======================================");
 
             System.out.print("Choice: ");
+
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid choice. Please enter a number between 1 and 4.");
+                scanner.nextLine();
+                continue;
+            }
+
             choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -121,6 +128,12 @@ public class FieldWorkerMenu {
         System.out.println("\n===== Resolve Report =====");
 
         System.out.print("Enter Report ID: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid Report ID.");
+            scanner.nextLine();
+            return;
+        }
         int reportId = scanner.nextInt();
         scanner.nextLine();
 

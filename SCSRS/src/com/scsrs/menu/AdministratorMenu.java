@@ -53,7 +53,7 @@ public class AdministratorMenu {
 
     public void showMenu() {
 
-        int choice;
+        int choice = 0;
 
         do {
 
@@ -69,7 +69,13 @@ public class AdministratorMenu {
             System.out.println("========================================");
 
             System.out.print("Choice: ");
-            choice = scanner.nextInt();
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine();
+                continue;
+            }
+
+             choice = scanner.nextInt();
             scanner.nextLine();
 
             switch (choice) {
@@ -122,6 +128,13 @@ public class AdministratorMenu {
         System.out.println("\n===== Register Resident =====");
 
         System.out.print("Enter User ID: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid User ID.");
+            scanner.nextLine();
+            return;
+        }
+
         int userId = scanner.nextInt();
         scanner.nextLine();
 
@@ -213,6 +226,13 @@ public class AdministratorMenu {
     private void searchReport() {
 
         System.out.print("Enter Report ID: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid Report ID.");
+            scanner.nextLine();
+            return;
+        }
+
         int reportId = scanner.nextInt();
         scanner.nextLine();
 
@@ -232,6 +252,12 @@ public class AdministratorMenu {
     private void updateReportStatus() {
 
         System.out.print("Enter Report ID: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid Report ID.");
+            scanner.nextLine();
+            return;
+        }
         int reportId = scanner.nextInt();
         scanner.nextLine();
 
@@ -247,6 +273,11 @@ public class AdministratorMenu {
         System.out.println("3. RESOLVED");
 
         System.out.print("Choice: ");
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid choice.");
+            scanner.nextLine();
+            return;
+        }
         int choice = scanner.nextInt();
         scanner.nextLine();
 
@@ -285,6 +316,12 @@ public class AdministratorMenu {
     private void assignReport() {
 
         System.out.print("Enter Report ID: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid Report ID.");
+            scanner.nextLine();
+            return;
+        }
         int reportId = scanner.nextInt();
         scanner.nextLine();
 
@@ -306,6 +343,12 @@ public class AdministratorMenu {
         }
 
         System.out.print("Enter Field Worker ID: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid Field Worker ID.");
+            scanner.nextLine();
+            return;
+        }
         int workerId = scanner.nextInt();
         scanner.nextLine();
 

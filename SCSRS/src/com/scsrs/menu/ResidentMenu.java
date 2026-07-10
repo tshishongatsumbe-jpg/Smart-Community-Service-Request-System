@@ -42,12 +42,12 @@ public class ResidentMenu {
     }
 
     // ==========================
-    // Menu
+    // Resident Menu
     // ==========================
 
     public void showMenu() {
 
-        int choice;
+        int choice = 0;
 
         do {
 
@@ -59,6 +59,13 @@ public class ResidentMenu {
             System.out.println("===================================");
 
             System.out.print("Choice: ");
+
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine();
+                continue;
+            }
+
             choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -96,6 +103,13 @@ public class ResidentMenu {
         System.out.println("\n===== Submit Report =====");
 
         System.out.print("Enter Report ID: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid Report ID.");
+            scanner.nextLine();
+            return;
+        }
+
         int reportId = scanner.nextInt();
         scanner.nextLine();
 
@@ -120,6 +134,13 @@ public class ResidentMenu {
         System.out.println("7. Other");
 
         System.out.print("Choice: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid category.");
+            scanner.nextLine();
+            return;
+        }
+
         int option = scanner.nextInt();
         scanner.nextLine();
 
@@ -177,13 +198,12 @@ public class ResidentMenu {
     }
 
     // ==========================
-    // View Reports
+    // View My Reports
     // ==========================
 
     private void viewReports() {
 
         System.out.println("\n===== My Reports =====");
-
         reportService.viewResidentReports(resident);
 
     }
@@ -195,6 +215,13 @@ public class ResidentMenu {
     private void searchReport() {
 
         System.out.print("Enter Report ID: ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid Report ID.");
+            scanner.nextLine();
+            return;
+        }
+
         int reportId = scanner.nextInt();
         scanner.nextLine();
 
