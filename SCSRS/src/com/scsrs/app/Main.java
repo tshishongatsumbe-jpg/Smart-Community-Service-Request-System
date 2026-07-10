@@ -23,159 +23,192 @@ import java.util.Scanner;
  */
 public class Main {
 
-  // ==========================
-  // Services
-  // ==========================
+    // ==========================
+    // Services
+    // ==========================
 
-  private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
-  private static final UserService userService = new UserService();
-  private static final ReportService reportService = new ReportService();
-  private static final FileManager fileManager = new FileManager();
-  private static final Validation validation = new Validation();
+    private static final UserService userService = new UserService();
+    private static final ReportService reportService = new ReportService();
+    private static final FileManager fileManager = new FileManager();
+    private static final Validation validation = new Validation();
 
-  private static final AuthenticationService authenticationService =
-          new AuthenticationService(userService);
+    private static final AuthenticationService authenticationService =
+            new AuthenticationService(userService);
 
-  private static User loggedInUser;
+    private static User loggedInUser;
 
-  private static final AdministratorMenu administratorMenu =
-          new AdministratorMenu(
-                  userService,
-                  reportService,
-                  fileManager,
-                  validation,
-                  scanner
-          );
+    private static final AdministratorMenu administratorMenu =
+            new AdministratorMenu(
+                    userService,
+                    reportService,
+                    fileManager,
+                    validation,
+                    scanner
+            );
 
-  // ==========================
-  // Main Method
-  // ==========================
+    // ==========================
+    // Main Method
+    // ==========================
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    createDefaultUsers();
+        createDefaultUsers();
 
-    login();
+        boolean running = true;
 
-    if (loggedInUser instanceof Administrator) {
+        while (running) {
 
-      administratorMenu.showMenu();
+            System.out.println("\n====================================");
+            System.out.println(" Smart Community Service Request System");
+            System.out.println("====================================");
+            System.out.println("1. Login");
+            System.out.println("2. Exit");
+            System.out.println("====================================");
+            System.out.print("Choice: ");
 
-    } else if (loggedInUser instanceof Resident) {
+            int choice = scanner.nextInt();
+            scanner.nextLine();
 
-      ResidentMenu residentMenu =
-              new ResidentMenu(
-                      userService,
-                      reportService,
-                      scanner,
-                      (Resident) loggedInUser
-              );
+            switch (choice) {
 
-      residentMenu.showMenu();
+                case 1:
 
-    } else if (loggedInUser instanceof FieldWorker) {
+                    login();
 
-      FieldWorkerMenu fieldWorkerMenu =
-              new FieldWorkerMenu(
-                      reportService,
-                      scanner,
-                      (FieldWorker) loggedInUser
-              );
+                    if (loggedInUser instanceof Administrator) {
 
-      fieldWorkerMenu.showMenu();
+                        administratorMenu.showMenu();
 
+                    } else if (loggedInUser instanceof Resident) {
+
+                        ResidentMenu residentMenu =
+                                new ResidentMenu(
+                                        userService,
+                                        reportService,
+                                        scanner,
+                                        (Resident) loggedInUser
+                                );
+
+                        residentMenu.showMenu();
+
+                    } else if (loggedInUser instanceof FieldWorker) {
+
+                        FieldWorkerMenu fieldWorkerMenu =
+                                new FieldWorkerMenu(
+                                        reportService,
+                                        scanner,
+                                        (FieldWorker) loggedInUser
+                                );
+
+                        fieldWorkerMenu.showMenu();
+
+                    }
+
+                    loggedInUser = null;
+                    break;
+
+                case 2:
+
+                    running = false;
+                    System.out.println("\nThank you for using SCSRS.");
+                    break;
+
+                default:
+
+                    System.out.println("Invalid choice.");
+            }
+        }
+
+        scanner.close();
     }
 
-    scanner.close();
-  }
+    // ==========================
+    // Create Default Users
+    // ==========================
 
-  // ==========================
-  // Create Default Users
-  // ==========================
+    /**
+     * Creates default users for testing.
+     */
+    private static void createDefaultUsers() {
 
-  /**
-   * Creates default users for testing.
-   */
-  private static void createDefaultUsers() {
+        userService.addUser(
+                new Administrator(
+                        1,
+                        "System",
+                        "Administrator",
+                        "admin@scsrs.com",
+                        "admin123",
+                        "0123456789"
+                )
+        );
 
-    userService.addUser(
-            new Administrator(
-                    1,
-                    "System",
-                    "Administrator",
-                    "admin@scsrs.com",
-                    "admin123",
-                    "0123456789"
-            )
-    );
+        userService.addUser(
+                new Resident(
+                        2,
+                        "John",
+                        "Smith",
+                        "john@scsrs.com",
+                        "resident123",
+                        "0711111111"
+                )
+        );
 
-    userService.addUser(
-            new Resident(
-                    2,
-                    "John",
-                    "Smith",
-                    "john@scsrs.com",
-                    "resident123",
-                    "0711111111"
-            )
-    );
+        userService.addUser(
+                new FieldWorker(
+                        3,
+                        "Peter",
+                        "Jones",
+                        "worker1@scsrs.com",
+                        "worker123",
+                        "0722222222"
+                )
+        );
 
-    userService.addUser(
-            new FieldWorker(
-                    3,
-                    "Peter",
-                    "Jones",
-                    "worker1@scsrs.com",
-                    "worker123",
-                    "0722222222"
-            )
-    );
-
-    userService.addUser(
-            new FieldWorker(
-                    4,
-                    "Sarah",
-                    "Williams",
-                    "worker2@scsrs.com",
-                    "worker123",
-                    "0733333333"
-            )
-    );
-  }
-
-  // ==========================
-  // Login
-  // ==========================
-
-  /**
-   * Allows a user to log into the system.
-   */
-  private static void login() {
-
-    System.out.println("====================================");
-    System.out.println(" Welcome to SCSRS");
-    System.out.println("====================================");
-
-    while (true) {
-
-      System.out.print("Email: ");
-      String email = scanner.nextLine();
-
-      System.out.print("Password: ");
-      String password = scanner.nextLine();
-
-      loggedInUser = authenticationService.login(email, password);
-
-      if (loggedInUser != null) {
-
-        System.out.println("\nLogin successful!");
-        System.out.println("Welcome " + loggedInUser.getFullName());
-        break;
-
-      }
-
-      System.out.println("\nInvalid email or password.\n");
+        userService.addUser(
+                new FieldWorker(
+                        4,
+                        "Sarah",
+                        "Williams",
+                        "worker2@scsrs.com",
+                        "worker123",
+                        "0733333333"
+                )
+        );
     }
-  }
+
+    // ==========================
+    // Login
+    // ==========================
+
+    /**
+     * Allows a user to log into the system.
+     */
+    private static void login() {
+
+        System.out.println("\n====================================");
+        System.out.println(" Login");
+        System.out.println("====================================");
+
+        while (true) {
+
+            System.out.print("Email: ");
+            String email = scanner.nextLine();
+
+            System.out.print("Password: ");
+            String password = scanner.nextLine();
+
+            loggedInUser = authenticationService.login(email, password);
+
+            if (loggedInUser != null) {
+
+                System.out.println("\nLogin successful!");
+                System.out.println("Welcome " + loggedInUser.getFullName());
+                break;
+            }
+
+            System.out.println("\nInvalid email or password.\n");
+        }
+    }
 }

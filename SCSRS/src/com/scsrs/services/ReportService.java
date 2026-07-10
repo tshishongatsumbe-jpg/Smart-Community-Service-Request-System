@@ -3,6 +3,8 @@ package com.scsrs.services;
 import com.scsrs.enums.ReportStatus;
 import com.scsrs.reports.Report;
 import com.scsrs.users.FieldWorker;
+import com.scsrs.users.Resident;
+
 
 import java.util.ArrayList;
 
@@ -227,6 +229,30 @@ public class ReportService {
         }
 
         return count;
+    }
+    /**
+     * Displays all reports submitted by a specific resident.
+     *
+     * @param resident The resident whose reports should be displayed.
+     */
+    public void viewResidentReports(Resident resident) {
+
+        boolean found = false;
+
+        for (Report report : reports) {
+
+            if (report.getResident().getUserId() == resident.getUserId()) {
+
+                System.out.println(report);
+                System.out.println("----------------------------");
+                found = true;
+
+            }
+        }
+
+        if (!found) {
+            System.out.println("You have not submitted any reports.");
+        }
     }
 
 }

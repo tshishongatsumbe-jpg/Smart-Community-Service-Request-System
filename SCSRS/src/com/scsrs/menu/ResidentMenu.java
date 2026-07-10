@@ -53,7 +53,7 @@ public class ResidentMenu {
 
             System.out.println("\n========== Resident Menu ==========");
             System.out.println("1. Submit Report");
-            System.out.println("2. View All Reports");
+            System.out.println("2. View My Reports");
             System.out.println("3. Search Report");
             System.out.println("4. Logout");
             System.out.println("===================================");
@@ -182,8 +182,9 @@ public class ResidentMenu {
 
     private void viewReports() {
 
-        System.out.println("\n===== Community Reports =====");
-        reportService.viewAllReports();
+        System.out.println("\n===== My Reports =====");
+
+        reportService.viewResidentReports(resident);
 
     }
 
