@@ -57,18 +57,23 @@ public class AdministratorMenu {
 
         do {
 
-            System.out.println("\n========== Administrator Menu ==========");
-            System.out.println("1. Register Resident");
-            System.out.println("2. View All Users");
-            System.out.println("3. View All Reports");
-            System.out.println("4. Search Report");
+            System.out.println("\n==================================================");
+            System.out.println("              ADMINISTRATOR MENU");
+            System.out.println("==================================================");
+            System.out.println("Welcome, Administrator!");
+            System.out.println();
+            System.out.println("Please select one of the following options:");
+            System.out.println();
+            System.out.println("1. Register a New Resident");
+            System.out.println("2. View All Registered Users");
+            System.out.println("3. View All Community Reports");
+            System.out.println("4. Search for a Report");
             System.out.println("5. Update Report Status");
-            System.out.println("6. Assign Report");
+            System.out.println("6. Assign Report to a Field Worker");
             System.out.println("7. Save Reports");
             System.out.println("8. Logout");
-            System.out.println("========================================");
-
-            System.out.print("Choice: ");
+            System.out.println("==================================================");
+            System.out.print("Enter your choice (1-8): ");
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number.");
                 scanner.nextLine();
@@ -109,11 +114,15 @@ public class AdministratorMenu {
                     break;
 
                 case 8:
-                    System.out.println("Logging out...");
+                    System.out.println("\n========================================");
+                    System.out.println("You have successfully logged out.");
+                    System.out.println("Returning to the Main Menu...");
+                    System.out.println("========================================");
                     break;
 
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("\nInvalid choice.");
+                    System.out.println("Please enter a number between 1 and 8.");
             }
 
         } while (choice != 8);
@@ -125,12 +134,17 @@ public class AdministratorMenu {
 
     private void registerResident() {
 
-        System.out.println("\n===== Register Resident =====");
+        System.out.println("\n==================================================");
+        System.out.println("          REGISTER A NEW RESIDENT");
+        System.out.println("==================================================");
+        System.out.println("Please enter the resident's details.");
+        System.out.println("Fields marked below are required.");
+        System.out.println();
 
         System.out.print("Enter User ID: ");
 
         if (!scanner.hasNextInt()) {
-            System.out.println("Invalid User ID.");
+            System.out.println("User ID must be a number.");
             scanner.nextLine();
             return;
         }
@@ -193,7 +207,12 @@ public class AdministratorMenu {
         );
 
         if (userService.addUser(resident)) {
-            System.out.println("Resident registered successfully.");
+            System.out.println("\n========================================");
+            System.out.println("Resident registered successfully!");
+            System.out.println("Resident: " + resident.getFullName());
+            System.out.println("Email   : " + resident.getEmail());
+            System.out.println("The resident can now log into the system.");
+            System.out.println("========================================");
         } else {
             System.out.println("Registration failed.");
         }
@@ -205,7 +224,9 @@ public class AdministratorMenu {
 
     private void viewAllUsers() {
 
-        System.out.println("\n===== Registered Users =====");
+        System.out.println("\n==================================================");
+        System.out.println("             REGISTERED USERS");
+        System.out.println("==================================================");
         userService.viewAllUsers();
     }
 
@@ -215,7 +236,9 @@ public class AdministratorMenu {
 
     private void viewReports() {
 
-        System.out.println("\n===== Community Reports =====");
+        System.out.println("\n==================================================");
+        System.out.println("          COMMUNITY REPORTS");
+        System.out.println("==================================================");
         reportService.viewAllReports();
     }
 
@@ -225,7 +248,7 @@ public class AdministratorMenu {
 
     private void searchReport() {
 
-        System.out.print("Enter Report ID: ");
+        System.out.print("Enter the Report ID you wish to search for: ");
 
         if (!scanner.hasNextInt()) {
             System.out.println("Invalid Report ID.");
@@ -241,7 +264,7 @@ public class AdministratorMenu {
         if (report != null) {
             System.out.println(report);
         } else {
-            System.out.println("Report not found.");
+            System.out.println("No report exists with the entered Report ID.");
         }
     }
 
@@ -251,7 +274,7 @@ public class AdministratorMenu {
 
     private void updateReportStatus() {
 
-        System.out.print("Enter Report ID: ");
+        System.out.print("Enter the Report ID to update: ");
 
         if (!scanner.hasNextInt()) {
             System.out.println("Invalid Report ID.");
@@ -272,7 +295,7 @@ public class AdministratorMenu {
         System.out.println("2. IN_PROGRESS");
         System.out.println("3. RESOLVED");
 
-        System.out.print("Choice: ");
+        System.out.print("Select the new status (1-3): ");
         if (!scanner.hasNextInt()) {
             System.out.println("Invalid choice.");
             scanner.nextLine();
@@ -298,14 +321,17 @@ public class AdministratorMenu {
                 break;
 
             default:
-                System.out.println("Invalid choice.");
+                System.out.println("Invalid choice. Please enter a number between 1 and 3.");
                 return;
         }
 
         if (reportService.updateReportStatus(reportId, status)) {
-            System.out.println("Report updated successfully.");
+            System.out.println("\n========================================");
+            System.out.println("Report status updated successfully.");
+            System.out.println("========================================");
         } else {
-            System.out.println("Update failed.");
+            System.out.println("Unable to update the report status.\n" +
+                    "Please try again.");
         }
     }
 
@@ -328,11 +354,13 @@ public class AdministratorMenu {
         Report report = reportService.searchReport(reportId);
 
         if (report == null) {
-            System.out.println("Report not found.");
+            System.out.println("No report was found with Report ID: " + reportId);
             return;
         }
 
         System.out.println("\nAvailable Field Workers");
+        System.out.println("----------------------------------");
+        System.out.println("Select a field worker from the list below:");
 
         for (User user : userService.getUsers()) {
 
@@ -342,7 +370,7 @@ public class AdministratorMenu {
             }
         }
 
-        System.out.print("Enter Field Worker ID: ");
+        System.out.print("Enter the Field Worker ID to assign this report: ");
 
         if (!scanner.hasNextInt()) {
             System.out.println("Invalid Field Worker ID.");
@@ -362,9 +390,13 @@ public class AdministratorMenu {
         FieldWorker worker = (FieldWorker) user;
 
         if (reportService.assignReport(reportId, worker)) {
-            System.out.println("Report assigned to " + worker.getFullName());
+            System.out.println("\n========================================");
+            System.out.println("Report assigned successfully.");
+            System.out.println("Assigned to: " + worker.getFullName());
+            System.out.println("========================================");
         } else {
-            System.out.println("Assignment failed.");
+            System.out.println("Unable to assign the report.\n" +
+                    "Please verify the report and field worker details.");
         }
     }
 
@@ -379,6 +411,8 @@ public class AdministratorMenu {
                 "reports.txt"
         );
 
-        System.out.println("Reports saved successfully.");
+        System.out.println("\n========================================");
+        System.out.println("Reports have been saved successfully.");
+        System.out.println("========================================");
     }
 }

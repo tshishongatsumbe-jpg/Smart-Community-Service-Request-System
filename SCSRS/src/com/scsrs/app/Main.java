@@ -60,13 +60,15 @@ public class Main {
 
         while (running) {
 
-            System.out.println("\n====================================");
-            System.out.println(" Smart Community Service Request System");
-            System.out.println("====================================");
-            System.out.println("1. Login");
-            System.out.println("2. Exit");
-            System.out.println("====================================");
-            System.out.print("Choice: ");
+            System.out.println("\n==================================================");
+            System.out.println("      SMART COMMUNITY SERVICE REQUEST SYSTEM");
+            System.out.println("==================================================");
+            System.out.println("Welcome!");
+            System.out.println();
+            System.out.println("Press 1 to Login.");
+            System.out.println("Press 2 to Exit the System.");
+            System.out.println("==================================================");
+            System.out.print("Enter your choice (1 or 2): ");
 
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number.");
@@ -83,8 +85,11 @@ public class Main {
 
                     login();
 
-                    if (loggedInUser instanceof Administrator) {
+                    if (loggedInUser == null) {
+                        break;
+                    }
 
+                    if (loggedInUser instanceof Administrator) {
                         administratorMenu.showMenu();
 
                     } else if (loggedInUser instanceof Resident) {
@@ -122,8 +127,8 @@ public class Main {
                     break;
 
                 default:
-
-                    System.out.println("Invalid choice.");
+                    System.out.println("\nInvalid choice.");
+                    System.out.println("Please enter 1 to Login or 2 to Exit.");
             }
         }
 
@@ -193,28 +198,96 @@ public class Main {
      */
     private static void login() {
 
-        System.out.println("\n====================================");
-        System.out.println(" Login");
-        System.out.println("====================================");
-
         while (true) {
 
-            System.out.print("Email: ");
+            System.out.println("\n==================================================");
+            System.out.println("                     LOGIN");
+            System.out.println("==================================================");
+            System.out.println("Who is logging into the system?");
+            System.out.println();
+            System.out.println("1. Administrator");
+            System.out.println("2. Resident");
+            System.out.println("3. Field Worker");
+            System.out.println("4. Return to Main Menu");
+            System.out.println("==================================================");
+            System.out.print("Enter your choice (1-4): ");
+
+            if (!scanner.hasNextInt()) {
+                System.out.println("\nInvalid input. Please enter a number.");
+                scanner.nextLine();
+                continue;
+            }
+
+            int roleChoice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (roleChoice) {
+
+                case 1:
+
+                    System.out.println("\n========== Administrator Login ==========");
+                    System.out.println("Administrator accounts manage the system.");
+                    break;
+
+                case 2:
+
+                    System.out.println("\n========== Resident Login ==========");
+                    System.out.println("Residents can submit and track service requests.");
+                    System.out.println("If you do not have an account,");
+                    System.out.println("please contact the Administrator.");
+                    break;
+
+                case 3:
+
+                    System.out.println("\n========== Field Worker Login ==========");
+                    System.out.println("Field Workers manage assigned service requests.");
+                    break;
+
+                case 4:
+
+                    return;
+
+                default:
+
+                    System.out.println("\nInvalid choice.");
+                    System.out.println("Please enter 1 to Login or 2 to Exit.");
+                    continue;
+            }
+
+            System.out.print("\nEnter your email address: ");
             String email = scanner.nextLine();
 
-            System.out.print("Password: ");
+            System.out.print("Enter your password: ");
             String password = scanner.nextLine();
 
             loggedInUser = authenticationService.login(email, password);
 
             if (loggedInUser != null) {
 
-                System.out.println("\nLogin successful!");
-                System.out.println("Welcome " + loggedInUser.getFullName());
-                break;
-            }
+                // Ensure the selected role matches the account
+                if ((roleChoice == 1 && loggedInUser instanceof Administrator)
+                        || (roleChoice == 2 && loggedInUser instanceof Resident)
+                        || (roleChoice == 3 && loggedInUser instanceof FieldWorker)) {
 
-            System.out.println("\nInvalid email or password.\n");
+                    System.out.println("\n========================================");
+                    System.out.println("Login Successful!");
+                    System.out.println("Welcome, " + loggedInUser.getFullName());
+                    System.out.println("========================================");
+                    return;
+
+                } else {
+
+                    System.out.println("\nYou selected the wrong user role.");
+                    System.out.println("Please choose the correct role and try again.");
+                    loggedInUser = null;
+                }
+
+            } else {
+
+                System.out.println();
+                System.out.println(authenticationService.getLoginMessage());
+                System.out.println();
+            }
         }
     }
 }

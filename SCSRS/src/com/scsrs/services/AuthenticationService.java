@@ -17,22 +17,19 @@ public class AuthenticationService {
     // ==========================
 
     private final UserService userService;
+    private String loginMessage;
 
     // ==========================
     // Constructor
     // ==========================
 
-    /**
-     * Creates a new AuthenticationService.
-     *
-     * @param userService The user service used to access registered users.
-     */
     public AuthenticationService(UserService userService) {
         this.userService = userService;
+        this.loginMessage = "";
     }
 
     // ==========================
-    // Methods
+    // Login
     // ==========================
 
     /**
@@ -40,23 +37,45 @@ public class AuthenticationService {
      *
      * @param email User email.
      * @param password User password.
-     * @return Matching User if login succeeds, otherwise null.
+     * @return User if login is successful, otherwise null.
      */
     public User login(String email, String password) {
 
         ArrayList<User> users = userService.getUsers();
 
+        // Check whether the email exists
         for (User user : users) {
 
-            if (user.getEmail().equalsIgnoreCase(email)
-                    && user.getPassword().equals(password)) {
+            if (user.getEmail().equalsIgnoreCase(email)) {
 
-                return user;
+                // Email exists, now check password
+                if (user.getPassword().equals(password)) {
+
+                    loginMessage = "Login successful.";
+                    return user;
+
+                } else {
+
+                    loginMessage = "Incorrect password.";
+                    return null;
+
+                }
             }
-
         }
 
+        // Email not found
+        loginMessage = "Email address not found. Please check your email or contact the Administrator.";
+
         return null;
+    }
+
+    /**
+     * Returns the latest login message.
+     *
+     * @return Login message.
+     */
+    public String getLoginMessage() {
+        return loginMessage;
     }
 
 }

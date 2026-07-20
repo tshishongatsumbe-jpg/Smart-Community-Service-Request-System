@@ -83,7 +83,8 @@ public class FieldWorkerMenu {
                     break;
 
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("\nInvalid choice.");
+                    System.out.println("Please enter a number between 1 and 4.");
             }
 
         } while (choice != 4);
