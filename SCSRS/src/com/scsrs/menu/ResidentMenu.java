@@ -50,16 +50,19 @@ public class ResidentMenu {
         int choice = 0;
 
         do {
-
-            System.out.println("\n========== Resident Menu ==========");
-            System.out.println("1. Submit Report");
-            System.out.println("2. View My Reports");
-            System.out.println("3. Search Report");
+            System.out.println("\n==================================================");
+            System.out.println("                 RESIDENT MENU");
+            System.out.println("==================================================");
+            System.out.println("Welcome, " + resident.getFullName() + "!");
+            System.out.println();
+            System.out.println("Please choose one of the following options:");
+            System.out.println();
+            System.out.println("1. Submit a New Service Request");
+            System.out.println("2. View My Submitted Reports");
+            System.out.println("3. Search for a Report");
             System.out.println("4. Logout");
-            System.out.println("===================================");
-
-            System.out.print("Choice: ");
-
+            System.out.println("==================================================");
+            System.out.print("Enter your choice (1-4): ");
             if (!scanner.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number.");
                 scanner.nextLine();
@@ -84,7 +87,10 @@ public class ResidentMenu {
                     break;
 
                 case 4:
-                    System.out.println("Logging out...");
+                    System.out.println("\n==================================================");
+                    System.out.println("You have successfully logged out.");
+                    System.out.println("Returning to the Main Menu...");
+                    System.out.println("==================================================");
                     break;
 
                 default:
@@ -101,7 +107,11 @@ public class ResidentMenu {
 
     private void submitReport() {
 
-        System.out.println("\n===== Submit Report =====");
+        System.out.println("\n==================================================");
+        System.out.println("          SUBMIT A SERVICE REQUEST");
+        System.out.println("==================================================");
+        System.out.println("Please complete the information below.");
+        System.out.println();
 
         System.out.print("Enter Report ID: ");
 
@@ -192,9 +202,16 @@ public class ResidentMenu {
         );
 
         if (reportService.addReport(report)) {
-            System.out.println("\nReport submitted successfully!");
+            System.out.println("\n==================================================");
+            System.out.println("Service request submitted successfully!");
+            System.out.println("Report ID : " + reportId);
+            System.out.println("Status    : OPEN");
+            System.out.println();
+            System.out.println("You can use this Report ID to track your request.");
+            System.out.println("==================================================");
         } else {
-            System.out.println("\nFailed to submit report.");
+            System.out.println("\nUnable to submit your service request.");
+            System.out.println("Please try again.");
         }
     }
 
@@ -204,7 +221,9 @@ public class ResidentMenu {
 
     private void viewReports() {
 
-        System.out.println("\n===== My Reports =====");
+        System.out.println("\n==================================================");
+        System.out.println("            MY SERVICE REQUESTS");
+        System.out.println("==================================================");
         reportService.viewResidentReports(resident);
 
     }
@@ -215,7 +234,7 @@ public class ResidentMenu {
 
     private void searchReport() {
 
-        System.out.print("Enter Report ID: ");
+        System.out.print("Enter the Report ID you wish to search for: ");
 
         if (!scanner.hasNextInt()) {
             System.out.println("Invalid Report ID.");
@@ -230,12 +249,14 @@ public class ResidentMenu {
 
         if (report != null) {
 
-            System.out.println("\n===== Report Found =====");
+            System.out.println("\n==================================================");
+            System.out.println("              REPORT DETAILS");
+            System.out.println("==================================================");
             System.out.println(report);
 
         } else {
 
-            System.out.println("Report not found.");
+            System.out.println("No report exists with Report ID: " + reportId);
 
         }
 
