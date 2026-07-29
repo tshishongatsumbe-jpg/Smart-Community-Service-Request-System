@@ -42,7 +42,7 @@ public class AuthenticationService {
     public User login(String email, String password) {
 
         ArrayList<User> users = userService.getUsers();
-
+        // Search for a matching email address
         // Check whether the email exists
         for (User user : users) {
 
@@ -56,7 +56,7 @@ public class AuthenticationService {
 
                 } else {
 
-                    loginMessage = "Incorrect password.";
+                    loginMessage = "Incorrect password. Please try again.";
                     return null;
 
                 }
@@ -64,7 +64,7 @@ public class AuthenticationService {
         }
 
         // Email not found
-        loginMessage = "Email address not found. Please check your email or contact the Administrator.";
+        loginMessage = "No account was found with this email address. Please check your email or contact the Administrator.";
 
         return null;
     }

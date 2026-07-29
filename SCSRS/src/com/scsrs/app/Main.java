@@ -270,8 +270,17 @@ public class Main {
                         || (roleChoice == 3 && loggedInUser instanceof FieldWorker)) {
 
                     System.out.println("\n========================================");
-                    System.out.println("Login Successful!");
+                    System.out.println(authenticationService.getLoginMessage());
                     System.out.println("Welcome, " + loggedInUser.getFullName());
+
+                    if (loggedInUser instanceof Administrator) {
+                        System.out.println("Role: Administrator");
+                    } else if (loggedInUser instanceof Resident) {
+                        System.out.println("Role: Resident");
+                    } else if (loggedInUser instanceof FieldWorker) {
+                        System.out.println("Role: Field Worker");
+                    }
+
                     System.out.println("========================================");
                     return;
 
