@@ -59,6 +59,10 @@ public class ReportService {
      */
     public boolean addReport(Report report) {
 
+        if (report == null) {
+            return false;
+        }
+
         if (searchReport(report.getReportId()) != null) {
             return false;
         }
@@ -73,7 +77,7 @@ public class ReportService {
     public void viewAllReports() {
 
         if (reports.isEmpty()) {
-            System.out.println("No reports available.");
+            System.out.println("There are currently no reports in the system.");
             return;
         }
 
@@ -119,6 +123,10 @@ public class ReportService {
             return false;
         }
 
+        if (newStatus == null) {
+            return false;
+        }
+
         report.setStatus(newStatus);
         return true;
     }
@@ -135,6 +143,10 @@ public class ReportService {
         Report report = searchReport(reportId);
 
         if (report == null) {
+            return false;
+        }
+
+        if (worker == null) {
             return false;
         }
 
@@ -251,7 +263,7 @@ public class ReportService {
         }
 
         if (!found) {
-            System.out.println("You have not submitted any reports.");
+            System.out.println("You have not submitted any service requests yet.");
         }
     }
 
