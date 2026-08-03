@@ -4,6 +4,7 @@ import com.scsrs.menu.AdministratorMenu;
 import com.scsrs.menu.FieldWorkerMenu;
 import com.scsrs.menu.ResidentMenu;
 import com.scsrs.services.AuthenticationService;
+import com.scsrs.services.RegistrationService;
 import com.scsrs.services.ReportService;
 import com.scsrs.services.UserService;
 import com.scsrs.storage.FileManager;
@@ -37,6 +38,13 @@ public class Main {
     private static final AuthenticationService authenticationService =
             new AuthenticationService(userService);
 
+    private static final RegistrationService registrationService =
+            new RegistrationService(
+                    userService,
+                    validation,
+                    scanner
+            );
+
     private static User loggedInUser;
 
     private static final AdministratorMenu administratorMenu =
@@ -60,80 +68,85 @@ public class Main {
 
         while (running) {
 
-            System.out.println("\n==================================================");
-            System.out.println("      SMART COMMUNITY SERVICE REQUEST SYSTEM");
-            System.out.println("==================================================");
-            System.out.println("Welcome!");
-            System.out.println();
-            System.out.println("Press 1 to Login.");
-            System.out.println("Press 2 to Exit the System.");
-            System.out.println("==================================================");
-            System.out.print("Enter your choice (1 or 2): ");
-
-            if (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.nextLine();
-                continue;
-            }
-
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = displayMainMenu();
 
             switch (choice) {
 
                 case 1:
-
-                    login();
-
-                    if (loggedInUser == null) {
-                        break;
-                    }
-
-                    if (loggedInUser instanceof Administrator) {
-                        administratorMenu.showMenu();
-
-                    } else if (loggedInUser instanceof Resident) {
-
-                        ResidentMenu residentMenu =
-                                new ResidentMenu(
-                                        userService,
-                                        reportService,
-                                        scanner,
-                                        (Resident) loggedInUser
-                                );
-
-                        residentMenu.showMenu();
-
-                    } else if (loggedInUser instanceof FieldWorker) {
-
-                        FieldWorkerMenu fieldWorkerMenu =
-                                new FieldWorkerMenu(
-                                        reportService,
-                                        scanner,
-                                        (FieldWorker) loggedInUser
-                                );
-
-                        fieldWorkerMenu.showMenu();
-
-                    }
-
-                    loggedInUser = null;
+                    registerResident();
                     break;
 
                 case 2:
+                    loginUser();
+                    break;
 
+                case 3:
                     running = false;
                     System.out.println("\nThank you for using SCSRS.");
                     break;
 
                 default:
                     System.out.println("\nInvalid choice.");
-                    System.out.println("Please enter 1 to Login or 2 to Exit.");
+                    System.out.println("Please enter 1, 2 or 3.");
             }
         }
 
         scanner.close();
     }
+
+    // ==========================
+    // Main Menu
+    // ==========================
+
+    /**
+     * Displays the main menu.
+     *
+     * @return User's menu choice.
+     */
+    private static int displayMainMenu() {
+
+        System.out.println("\n==================================================");
+        System.out.println("      SMART COMMUNITY SERVICE REQUEST SYSTEM");
+        System.out.println("==================================================");
+        System.out.println("Welcome!");
+        System.out.println();
+        System.out.println("1. Create Resident Account");
+        System.out.println("2. Login");
+        System.out.println("3. Exit the System");
+        System.out.println("==================================================");
+        System.out.print("Enter your choice (1-3): ");
+
+        if (!scanner.hasNextInt()) {
+            System.out.println("Invalid input. Please enter a number.");
+            scanner.nextLine();
+            return -1;
+        }
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        return choice;
+    }
+
+    // ==========================
+    // Register Resident
+    // ==========================
+
+    /**
+     * Registers a resident and automatically logs them in.
+     */
+    private static void registerResident() {
+
+        Resident resident = registrationService.createResidentAccount();
+
+        if (resident != null) {
+            loginResident(resident.getEmail());
+        }
+    }
+
+    // ==========================
+    // Create Default Users
+    // ==========================
 
     // ==========================
     // Create Default Users
@@ -152,17 +165,6 @@ public class Main {
                         "admin@scsrs.com",
                         "admin123",
                         "0123456789"
-                )
-        );
-
-        userService.addUser(
-                new Resident(
-                        2,
-                        "John",
-                        "Smith",
-                        "john@scsrs.com",
-                        "resident123",
-                        "0711111111"
                 )
         );
 
@@ -190,13 +192,63 @@ public class Main {
     }
 
     // ==========================
-    // Login
+    // Resident Auto Login
+    // ==========================
+
+    /**
+     * Allows a newly registered resident to log in immediately.
+     */
+    private static void loginResident(String email) {
+
+        while (true) {
+
+            System.out.println("\n==================================================");
+            System.out.println("               RESIDENT LOGIN");
+            System.out.println("==================================================");
+            System.out.println("Email Address: " + email);
+            System.out.println("==================================================");
+
+            System.out.print("Enter your password: ");
+            String password = scanner.nextLine();
+
+            loggedInUser = authenticationService.login(email, password);
+
+            if (loggedInUser instanceof Resident) {
+
+                System.out.println("\n========================================");
+                System.out.println(authenticationService.getLoginMessage());
+                System.out.println("Welcome, " + loggedInUser.getFullName());
+                System.out.println("Role: Resident");
+                System.out.println("========================================");
+
+                ResidentMenu residentMenu =
+                        new ResidentMenu(
+                                userService,
+                                reportService,
+                                scanner,
+                                (Resident) loggedInUser
+                        );
+
+                residentMenu.showMenu();
+
+                loggedInUser = null;
+                return;
+
+            } else {
+
+                System.out.println(authenticationService.getLoginMessage());
+            }
+        }
+    }
+
+    // ==========================
+    // Login User
     // ==========================
 
     /**
      * Allows a user to log into the system.
      */
-    private static void login() {
+    private static void loginUser() {
 
         while (true) {
 
@@ -224,33 +276,29 @@ public class Main {
             switch (roleChoice) {
 
                 case 1:
-
                     System.out.println("\n========== Administrator Login ==========");
                     System.out.println("Administrator accounts manage the system.");
                     break;
 
                 case 2:
-
                     System.out.println("\n========== Resident Login ==========");
                     System.out.println("Residents can submit and track service requests.");
                     System.out.println("If you do not have an account,");
-                    System.out.println("please contact the Administrator.");
+                    System.out.println("return to the Main Menu and select");
+                    System.out.println("\"Create Resident Account\".");
                     break;
 
                 case 3:
-
                     System.out.println("\n========== Field Worker Login ==========");
                     System.out.println("Field Workers manage assigned service requests.");
                     break;
 
                 case 4:
-
                     return;
 
                 default:
-
                     System.out.println("\nInvalid choice.");
-                    System.out.println("Please enter 1 to Login or 2 to Exit.");
+                    System.out.println("Please enter a number between 1 and 4.");
                     continue;
             }
 
@@ -262,40 +310,63 @@ public class Main {
 
             loggedInUser = authenticationService.login(email, password);
 
-            if (loggedInUser != null) {
-
-                // Ensure the selected role matches the account
-                if ((roleChoice == 1 && loggedInUser instanceof Administrator)
-                        || (roleChoice == 2 && loggedInUser instanceof Resident)
-                        || (roleChoice == 3 && loggedInUser instanceof FieldWorker)) {
-
-                    System.out.println("\n========================================");
-                    System.out.println(authenticationService.getLoginMessage());
-                    System.out.println("Welcome, " + loggedInUser.getFullName());
-
-                    if (loggedInUser instanceof Administrator) {
-                        System.out.println("Role: Administrator");
-                    } else if (loggedInUser instanceof Resident) {
-                        System.out.println("Role: Resident");
-                    } else if (loggedInUser instanceof FieldWorker) {
-                        System.out.println("Role: Field Worker");
-                    }
-
-                    System.out.println("========================================");
-                    return;
-
-                } else {
-
-                    System.out.println("\nYou selected the wrong user role.");
-                    System.out.println("Please choose the correct role and try again.");
-                    loggedInUser = null;
-                }
-
-            } else {
-
+            if (loggedInUser == null) {
                 System.out.println();
                 System.out.println(authenticationService.getLoginMessage());
                 System.out.println();
+                continue;
+            }
+
+            // Ensure the selected role matches the account
+            if ((roleChoice == 1 && loggedInUser instanceof Administrator)
+                    || (roleChoice == 2 && loggedInUser instanceof Resident)
+                    || (roleChoice == 3 && loggedInUser instanceof FieldWorker)) {
+
+                System.out.println("\n========================================");
+                System.out.println(authenticationService.getLoginMessage());
+                System.out.println("Welcome, " + loggedInUser.getFullName());
+
+                if (loggedInUser instanceof Administrator) {
+                    System.out.println("Role: Administrator");
+                    System.out.println("========================================");
+                    administratorMenu.showMenu();
+
+                } else if (loggedInUser instanceof Resident) {
+                    System.out.println("Role: Resident");
+                    System.out.println("========================================");
+
+                    ResidentMenu residentMenu =
+                            new ResidentMenu(
+                                    userService,
+                                    reportService,
+                                    scanner,
+                                    (Resident) loggedInUser
+                            );
+
+                    residentMenu.showMenu();
+
+                } else if (loggedInUser instanceof FieldWorker) {
+                    System.out.println("Role: Field Worker");
+                    System.out.println("========================================");
+
+                    FieldWorkerMenu fieldWorkerMenu =
+                            new FieldWorkerMenu(
+                                    reportService,
+                                    scanner,
+                                    (FieldWorker) loggedInUser
+                            );
+
+                    fieldWorkerMenu.showMenu();
+                }
+
+                loggedInUser = null;
+                return;
+
+            } else {
+
+                System.out.println("\nYou selected the wrong user role.");
+                System.out.println("Please choose the correct role and try again.");
+                loggedInUser = null;
             }
         }
     }
