@@ -5,7 +5,7 @@ package com.scsrs.users;
  * A Field Worker is responsible for resolving community service requests.
  *
  * @author Shonisani
- * @version 1.0
+ * @version 2.0
  */
 public class FieldWorker extends User {
 
@@ -19,21 +19,28 @@ public class FieldWorker extends User {
      * @param password The field worker's password.
      * @param phoneNumber The field worker's phone number.
      */
-    public FieldWorker(int userId, String firstName, String lastName,
-                       String email, String password, String phoneNumber) {
+    public FieldWorker(int userId,
+                       String firstName,
+                       String lastName,
+                       String email,
+                       String password,
+                       String phoneNumber) {
 
         super(userId, firstName, lastName, email, password, phoneNumber);
     }
 
     /**
-     * Displays the user's role.
+     * Displays the field worker's role.
      */
+    @Override
     public void displayRole() {
         System.out.println("Role: Field Worker");
     }
 
     /**
      * Returns the field worker's information.
+     *
+     * @return Field worker details.
      */
     @Override
     public String toString() {

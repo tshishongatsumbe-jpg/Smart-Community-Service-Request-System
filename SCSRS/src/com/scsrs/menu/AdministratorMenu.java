@@ -141,21 +141,18 @@ public class AdministratorMenu {
         System.out.println("Fields marked below are required.");
         System.out.println();
 
-        System.out.print("Enter User ID: ");
+        // Automatically generate User ID
+        int userId = 1;
 
-        if (!scanner.hasNextInt()) {
-            System.out.println("User ID must be a number.");
-            scanner.nextLine();
-            return;
+        for (User user : userService.getUsers()) {
+
+            if (user.getUserId() >= userId) {
+                userId = user.getUserId() + 1;
+            }
         }
 
-        int userId = scanner.nextInt();
-        scanner.nextLine();
-
-        if (userService.searchUser(userId) != null) {
-            System.out.println("User ID already exists.");
-            return;
-        }
+        System.out.println("Generated User ID: " + userId);
+        System.out.println();
 
         System.out.print("Enter First Name: ");
         String firstName = scanner.nextLine();

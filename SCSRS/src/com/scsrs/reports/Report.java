@@ -2,9 +2,8 @@ package com.scsrs.reports;
 
 import com.scsrs.enums.ReportCategory;
 import com.scsrs.enums.ReportStatus;
-import com.scsrs.users.Resident;
 import com.scsrs.users.FieldWorker;
-
+import com.scsrs.users.Resident;
 
 /**
  * Represents a community service request submitted by a resident.
@@ -19,10 +18,14 @@ public class Report {
     // ==========================
 
     private int reportId;
+    private int serviceNumber;
+
     private String title;
     private String description;
+
     private ReportCategory category;
     private ReportStatus status;
+
     private Resident resident;
     private FieldWorker assignedWorker;
 
@@ -33,19 +36,21 @@ public class Report {
     /**
      * Creates a new community service report.
      *
-     * @param reportId Unique report ID.
+     * @param reportId Unique system report ID.
      * @param title Report title.
-     * @param description Detailed description of the issue.
-     * @param category Category of the report.
-     * @param status Current report status.
+     * @param description Report description.
+     * @param category Report category.
+     * @param status Report status.
      * @param resident Resident who submitted the report.
+     * @param serviceNumber Service number within the selected category.
      */
     public Report(int reportId,
                   String title,
                   String description,
                   ReportCategory category,
                   ReportStatus status,
-                  Resident resident) {
+                  Resident resident,
+                  int serviceNumber) {
 
         this.reportId = reportId;
         this.title = title;
@@ -54,6 +59,7 @@ public class Report {
         this.status = status;
         this.resident = resident;
         this.assignedWorker = null;
+        this.serviceNumber = serviceNumber;
     }
 
     // ==========================
@@ -66,6 +72,14 @@ public class Report {
 
     public void setReportId(int reportId) {
         this.reportId = reportId;
+    }
+
+    public int getServiceNumber() {
+        return serviceNumber;
+    }
+
+    public void setServiceNumber(int serviceNumber) {
+        this.serviceNumber = serviceNumber;
     }
 
     public String getTitle() {
@@ -107,9 +121,11 @@ public class Report {
     public void setResident(Resident resident) {
         this.resident = resident;
     }
+
     public FieldWorker getAssignedWorker() {
         return assignedWorker;
     }
+
     public void setAssignedWorker(FieldWorker assignedWorker) {
         this.assignedWorker = assignedWorker;
     }
@@ -121,7 +137,7 @@ public class Report {
     /**
      * Checks whether the report has been resolved.
      *
-     * @return true if the report is resolved; otherwise false.
+     * @return true if resolved; otherwise false.
      */
     public boolean isResolved() {
         return status == ReportStatus.RESOLVED;
@@ -134,11 +150,12 @@ public class Report {
     @Override
     public String toString() {
 
-        String workerName = assignedWorker == null
+        String workerName = (assignedWorker == null)
                 ? "Not Assigned"
                 : assignedWorker.getFullName();
 
         return "Report ID: " + reportId +
+                "\nService Number: " + serviceNumber +
                 "\nTitle: " + title +
                 "\nDescription: " + description +
                 "\nCategory: " + category +

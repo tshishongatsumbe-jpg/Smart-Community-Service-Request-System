@@ -5,7 +5,7 @@ package com.scsrs.users;
  * A Resident is a type of User.
  *
  * @author Shonisani
- * @version 1.0
+ * @version 2.0
  */
 public class Resident extends User {
 
@@ -19,8 +19,12 @@ public class Resident extends User {
      * @param password The resident's password.
      * @param phoneNumber The resident's phone number.
      */
-    public Resident(int userId, String firstName, String lastName,
-                    String email, String password, String phoneNumber) {
+    public Resident(int userId,
+                    String firstName,
+                    String lastName,
+                    String email,
+                    String password,
+                    String phoneNumber) {
 
         super(userId, firstName, lastName, email, password, phoneNumber);
     }
@@ -28,12 +32,15 @@ public class Resident extends User {
     /**
      * Displays the role of the user.
      */
+    @Override
     public void displayRole() {
         System.out.println("Role: Resident");
     }
 
     /**
      * Returns the resident's details.
+     *
+     * @return Resident information.
      */
     @Override
     public String toString() {

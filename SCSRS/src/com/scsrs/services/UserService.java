@@ -56,6 +56,10 @@ public class UserService {
      */
     public boolean addUser(User user) {
 
+        if (user == null) {
+            return false;
+        }
+
         if (searchUser(user.getUserId()) != null) {
             return false;
         }
@@ -126,5 +130,4 @@ public class UserService {
 
         return false;
     }
-
 }

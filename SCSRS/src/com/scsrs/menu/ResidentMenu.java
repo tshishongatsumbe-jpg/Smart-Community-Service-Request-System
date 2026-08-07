@@ -1,7 +1,6 @@
 package com.scsrs.menu;
 
 import com.scsrs.enums.ReportCategory;
-import com.scsrs.enums.ReportStatus;
 import com.scsrs.reports.Report;
 import com.scsrs.services.ReportService;
 import com.scsrs.services.UserService;
@@ -50,12 +49,11 @@ public class ResidentMenu {
         int choice = 0;
 
         do {
+
             System.out.println("\n==================================================");
             System.out.println("                 RESIDENT MENU");
             System.out.println("==================================================");
             System.out.println("Welcome, " + resident.getFullName() + "!");
-            System.out.println();
-            System.out.println("Please choose one of the following options:");
             System.out.println();
             System.out.println("1. Submit a New Service Request");
             System.out.println("2. View My Submitted Reports");
@@ -63,8 +61,9 @@ public class ResidentMenu {
             System.out.println("4. Logout");
             System.out.println("==================================================");
             System.out.print("Enter your choice (1-4): ");
+
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a number.");
+                System.out.println("Invalid input.");
                 scanner.nextLine();
                 continue;
             }
@@ -79,6 +78,7 @@ public class ResidentMenu {
                     break;
 
                 case 2:
+                    System.out.println("CASE 2 EXECUTED");
                     viewReports();
                     break;
 
@@ -94,8 +94,7 @@ public class ResidentMenu {
                     break;
 
                 default:
-                    System.out.println("\nInvalid choice.");
-                    System.out.println("Please enter a number between 1 and 4.");
+                    System.out.println("Invalid choice.");
             }
 
         } while (choice != 4);
@@ -110,24 +109,6 @@ public class ResidentMenu {
         System.out.println("\n==================================================");
         System.out.println("          SUBMIT A SERVICE REQUEST");
         System.out.println("==================================================");
-        System.out.println("Please complete the information below.");
-        System.out.println();
-
-        System.out.print("Enter Report ID: ");
-
-        if (!scanner.hasNextInt()) {
-            System.out.println("Invalid Report ID.");
-            scanner.nextLine();
-            return;
-        }
-
-        int reportId = scanner.nextInt();
-        scanner.nextLine();
-
-        if (reportService.searchReport(reportId) != null) {
-            System.out.println("Report ID already exists.");
-            return;
-        }
 
         System.out.print("Enter Title: ");
         String title = scanner.nextLine();
@@ -192,26 +173,29 @@ public class ResidentMenu {
                 return;
         }
 
-        Report report = new Report(
-                reportId,
+        // Let ReportService generate the Report ID and Service Number
+        Report report = reportService.createReport(
                 title,
                 description,
                 category,
-                ReportStatus.OPEN,
                 resident
         );
 
-        if (reportService.addReport(report)) {
+        if (report != null) {
+
             System.out.println("\n==================================================");
             System.out.println("Service request submitted successfully!");
-            System.out.println("Report ID : " + reportId);
-            System.out.println("Status    : OPEN");
+            System.out.println("Report ID      : " + report.getReportId());
+            System.out.println("Category       : " + report.getCategory());
+            System.out.println("Complaint No.  : " + report.getServiceNumber());
+            System.out.println("Status         : " + report.getStatus());
             System.out.println();
-            System.out.println("You can use this Report ID to track your request.");
+            System.out.println("Please keep your Report ID for tracking.");
             System.out.println("==================================================");
+
         } else {
-            System.out.println("\nUnable to submit your service request.");
-            System.out.println("Please try again.");
+
+            System.out.println("Unable to submit your service request.");
         }
     }
 
@@ -221,11 +205,9 @@ public class ResidentMenu {
 
     private void viewReports() {
 
-        System.out.println("\n==================================================");
-        System.out.println("            MY SERVICE REQUESTS");
-        System.out.println("==================================================");
-        reportService.viewResidentReports(resident);
+        System.out.println("VIEW REPORTS METHOD CALLED");
 
+        reportService.viewResidentReports(resident);
     }
 
     // ==========================
@@ -257,9 +239,6 @@ public class ResidentMenu {
         } else {
 
             System.out.println("No report exists with Report ID: " + reportId);
-
         }
-
     }
-
 }

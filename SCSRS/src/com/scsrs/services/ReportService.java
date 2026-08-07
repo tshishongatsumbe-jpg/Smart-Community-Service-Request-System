@@ -1,10 +1,10 @@
 package com.scsrs.services;
 
+import com.scsrs.enums.ReportCategory;
 import com.scsrs.enums.ReportStatus;
 import com.scsrs.reports.Report;
 import com.scsrs.users.FieldWorker;
 import com.scsrs.users.Resident;
-
 
 import java.util.ArrayList;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Provides services for managing community service reports.
  *
  * @author Shonisani
- * @version 2.0
+ * @version 3.0
  */
 public class ReportService {
 
@@ -47,6 +47,87 @@ public class ReportService {
     }
 
     // ==========================
+    // Report Creation
+    // ==========================
+
+    /**
+     * Generates the next available Report ID.
+     *
+     * @return Next Report ID.
+     */
+    private int generateReportId() {
+
+        int reportId = 1;
+
+        for (Report report : reports) {
+
+            if (report.getReportId() >= reportId) {
+                reportId = report.getReportId() + 1;
+            }
+
+        }
+
+        return reportId;
+    }
+
+    /**
+     * Generates the next Service Number within a category.
+     *
+     * @param category Report category.
+     * @return Next Service Number.
+     */
+    private int generateServiceNumber(ReportCategory category) {
+
+        int serviceNumber = 1;
+
+        for (Report report : reports) {
+
+            if (report.getCategory() == category) {
+                serviceNumber++;
+            }
+
+        }
+
+        return serviceNumber;
+    }
+
+    /**
+     * Creates a new report with an automatically generated
+     * Report ID and Service Number.
+     *
+     * @param title Report title.
+     * @param description Report description.
+     * @param category Report category.
+     * @param resident Resident submitting the report.
+     * @return Newly created Report or null if creation fails.
+     */
+    public Report createReport(String title,
+                               String description,
+                               ReportCategory category,
+                               Resident resident) {
+
+        int reportId = generateReportId();
+
+        int serviceNumber = generateServiceNumber(category);
+
+        Report report = new Report(
+                reportId,
+                title,
+                description,
+                category,
+                ReportStatus.OPEN,
+                resident,
+                serviceNumber
+        );
+
+        if (addReport(report)) {
+            return report;
+        }
+
+        return null;
+    }
+
+    // ==========================
     // Methods
     // ==========================
 
@@ -55,7 +136,7 @@ public class ReportService {
      *
      * @param report The report to add.
      * @return true if added successfully,
-     *         false if the Report ID already exists.
+     * false if the Report ID already exists.
      */
     public boolean addReport(Report report) {
 
@@ -83,7 +164,7 @@ public class ReportService {
 
         for (Report report : reports) {
             System.out.println(report);
-            System.out.println("----------------------------");
+            System.out.println("--------------------------------");
         }
     }
 
@@ -111,8 +192,7 @@ public class ReportService {
      *
      * @param reportId Report ID.
      * @param newStatus New report status.
-     * @return true if updated successfully,
-     *         false if report was not found.
+     * @return true if successful.
      */
     public boolean updateReportStatus(int reportId,
                                       ReportStatus newStatus) {
@@ -130,15 +210,16 @@ public class ReportService {
         report.setStatus(newStatus);
         return true;
     }
+
     /**
-     * Assigns a field worker to a report.
+     * Assigns a Field Worker to a report.
      *
-     * @param reportId The report ID.
-     * @param worker The field worker to assign.
-     * @return true if the assignment was successful;
-     *         false if the report was not found.
+     * @param reportId Report ID.
+     * @param worker Field Worker.
+     * @return true if successful.
      */
-    public boolean assignReport(int reportId, FieldWorker worker) {
+    public boolean assignReport(int reportId,
+                                FieldWorker worker) {
 
         Report report = searchReport(reportId);
 
@@ -155,13 +236,16 @@ public class ReportService {
         }
 
         report.setAssignedWorker(worker);
+        report.setStatus(ReportStatus.IN_PROGRESS);
+
         return true;
     }
+
     /**
      * Checks whether a report has already been assigned.
      *
-     * @param reportId The report ID.
-     * @return true if the report has an assigned worker.
+     * @param reportId Report ID.
+     * @return true if assigned.
      */
     public boolean isAssigned(int reportId) {
 
@@ -177,16 +261,16 @@ public class ReportService {
     /**
      * Returns the total number of reports.
      *
-     * @return Number of reports.
+     * @return Total reports.
      */
     public int getTotalReports() {
         return reports.size();
     }
 
     /**
-     * Counts all open reports.
+     * Counts all OPEN reports.
      *
-     * @return Number of open reports.
+     * @return Number of OPEN reports.
      */
     public int getOpenReports() {
 
@@ -204,9 +288,9 @@ public class ReportService {
     }
 
     /**
-     * Counts all reports currently in progress.
+     * Counts all IN_PROGRESS reports.
      *
-     * @return Number of reports in progress.
+     * @return Number of IN_PROGRESS reports.
      */
     public int getInProgressReports() {
 
@@ -224,9 +308,9 @@ public class ReportService {
     }
 
     /**
-     * Counts all resolved reports.
+     * Counts all RESOLVED reports.
      *
-     * @return Number of resolved reports.
+     * @return Number of RESOLVED reports.
      */
     public int getResolvedReports() {
 
@@ -242,29 +326,39 @@ public class ReportService {
 
         return count;
     }
+
     /**
-     * Displays all reports submitted by a specific resident.
+     * Displays all reports submitted by a resident.
      *
-     * @param resident The resident whose reports should be displayed.
+     * @param resident Resident.
      */
     public void viewResidentReports(Resident resident) {
+
+        System.out.println("========== DEBUG ==========");
+        System.out.println("Logged in Resident ID: " + resident.getUserId());
+        System.out.println("Total Reports: " + reports.size());
 
         boolean found = false;
 
         for (Report report : reports) {
 
+            System.out.println("------------------------");
+            System.out.println("Report ID: " + report.getReportId());
+            System.out.println("Stored Resident ID: "
+                    + report.getResident().getUserId());
+
             if (report.getResident().getUserId() == resident.getUserId()) {
 
+                System.out.println("MATCH FOUND");
                 System.out.println(report);
-                System.out.println("----------------------------");
                 found = true;
-
             }
         }
 
         if (!found) {
-            System.out.println("You have not submitted any service requests yet.");
+            System.out.println("NO MATCH FOUND");
         }
-    }
 
+        System.out.println("===========================");
+    }
 }

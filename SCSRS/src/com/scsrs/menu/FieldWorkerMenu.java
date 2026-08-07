@@ -169,10 +169,14 @@ public class FieldWorkerMenu {
 
         if (reportService.updateReportStatus(reportId, ReportStatus.RESOLVED)) {
 
-           System.out.println("\n==================================================");
-           System.out.println("Report has been marked as RESOLVED.");
-           System.out.println("Thank you for updating the service request.");
-           System.out.println("==================================================");
+            System.out.println("\n==================================================");
+            System.out.println("Report successfully resolved.");
+            System.out.println("Report ID       : " + report.getReportId());
+            System.out.println("Complaint Number: " + report.getServiceNumber());
+            System.out.println("Category        : " + report.getCategory());
+            System.out.println("Status          : RESOLVED");
+            System.out.println("==================================================");
+
         } else {
 
             System.out.println("Unable to update the report status.");

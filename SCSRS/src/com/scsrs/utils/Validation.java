@@ -57,5 +57,4 @@ public class Validation {
 
         return text == null || text.trim().isEmpty();
     }
-
 }
