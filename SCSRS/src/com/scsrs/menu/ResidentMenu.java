@@ -12,7 +12,7 @@ import java.util.Scanner;
  * Displays the Resident menu and handles resident actions.
  *
  * @author Shonisani
- * @version 2.0
+ * @version 3.0
  */
 public class ResidentMenu {
 
@@ -63,7 +63,7 @@ public class ResidentMenu {
             System.out.print("Enter your choice (1-4): ");
 
             if (!scanner.hasNextInt()) {
-                System.out.println("Invalid input.");
+                System.out.println("Invalid input. Please enter a number.");
                 scanner.nextLine();
                 continue;
             }
@@ -78,7 +78,6 @@ public class ResidentMenu {
                     break;
 
                 case 2:
-                    System.out.println("CASE 2 EXECUTED");
                     viewReports();
                     break;
 
@@ -94,7 +93,7 @@ public class ResidentMenu {
                     break;
 
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("Invalid choice. Please enter a number between 1 and 4.");
             }
 
         } while (choice != 4);
@@ -110,13 +109,7 @@ public class ResidentMenu {
         System.out.println("          SUBMIT A SERVICE REQUEST");
         System.out.println("==================================================");
 
-        System.out.print("Enter Title: ");
-        String title = scanner.nextLine();
-
-        System.out.print("Enter Description: ");
-        String description = scanner.nextLine();
-
-        System.out.println("\nSelect Category");
+        System.out.println("\nSelect Service Type");
         System.out.println("1. Water");
         System.out.println("2. Electricity");
         System.out.println("3. Roads");
@@ -128,7 +121,7 @@ public class ResidentMenu {
         System.out.print("Choice: ");
 
         if (!scanner.hasNextInt()) {
-            System.out.println("Invalid category.");
+            System.out.println("Invalid service type.");
             scanner.nextLine();
             return;
         }
@@ -137,43 +130,53 @@ public class ResidentMenu {
         scanner.nextLine();
 
         ReportCategory category;
+        String title;
 
         switch (option) {
 
             case 1:
                 category = ReportCategory.WATER;
+                title = "Water";
                 break;
 
             case 2:
                 category = ReportCategory.ELECTRICITY;
+                title = "Electricity";
                 break;
 
             case 3:
                 category = ReportCategory.ROADS;
+                title = "Roads";
                 break;
 
             case 4:
                 category = ReportCategory.SANITATION;
+                title = "Sanitation";
                 break;
 
             case 5:
                 category = ReportCategory.WASTE;
+                title = "Waste";
                 break;
 
             case 6:
                 category = ReportCategory.STREET_LIGHTS;
+                title = "Street Lights";
                 break;
 
             case 7:
                 category = ReportCategory.OTHER;
+                title = "Other";
                 break;
 
             default:
-                System.out.println("Invalid category.");
+                System.out.println("Invalid service type.");
                 return;
         }
 
-        // Let ReportService generate the Report ID and Service Number
+        System.out.print("Enter Description of the service type you just choose: ");
+        String description = scanner.nextLine();
+
         Report report = reportService.createReport(
                 title,
                 description,
@@ -186,7 +189,7 @@ public class ResidentMenu {
             System.out.println("\n==================================================");
             System.out.println("Service request submitted successfully!");
             System.out.println("Report ID      : " + report.getReportId());
-            System.out.println("Category       : " + report.getCategory());
+            System.out.println("Service Type   : " + report.getCategory());
             System.out.println("Complaint No.  : " + report.getServiceNumber());
             System.out.println("Status         : " + report.getStatus());
             System.out.println();
@@ -205,16 +208,35 @@ public class ResidentMenu {
 
     private void viewReports() {
 
-        System.out.println("VIEW REPORTS METHOD CALLED");
+        System.out.println("\n==================================================");
+        System.out.println("            MY SERVICE REQUESTS");
+        System.out.println("==================================================");
 
-        reportService.viewResidentReports(resident);
+        boolean found = false;
+
+        for (Report report : reportService.getReports()) {
+
+            if (report.getResident().getUserId() == resident.getUserId()) {
+
+                System.out.println(report);
+                System.out.println("--------------------------------");
+                found = true;
+            }
+        }
+
+        if (!found) {
+            System.out.println("You have not submitted any service requests yet.");
+        }
     }
-
     // ==========================
     // Search Report
     // ==========================
 
     private void searchReport() {
+
+        System.out.println("\n==================================================");
+        System.out.println("              SEARCH FOR A REPORT");
+        System.out.println("==================================================");
 
         System.out.print("Enter the Report ID you wish to search for: ");
 
@@ -238,7 +260,7 @@ public class ResidentMenu {
 
         } else {
 
-            System.out.println("No report exists with Report ID: " + reportId);
+            System.out.println("\nNo report exists with Report ID: " + reportId);
         }
     }
 }

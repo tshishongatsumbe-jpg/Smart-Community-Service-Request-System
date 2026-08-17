@@ -65,7 +65,7 @@ public class RegistrationService {
 
         // First Name
         System.out.print("Enter First Name: ");
-        String firstName = scanner.nextLine();
+        String firstName = scanner.nextLine().trim();
 
         if (validation.isEmpty(firstName)) {
             System.out.println("First name cannot be empty.");
@@ -74,7 +74,7 @@ public class RegistrationService {
 
         // Last Name
         System.out.print("Enter Last Name: ");
-        String lastName = scanner.nextLine();
+        String lastName = scanner.nextLine().trim();
 
         if (validation.isEmpty(lastName)) {
             System.out.println("Last name cannot be empty.");
