@@ -64,11 +64,17 @@ public class RegistrationService {
         System.out.println();
 
         // First Name
+        // First Name
         System.out.print("Enter First Name: ");
         String firstName = scanner.nextLine().trim();
 
         if (validation.isEmpty(firstName)) {
             System.out.println("First name cannot be empty.");
+            return null;
+        }
+
+        if (!firstName.matches("[a-zA-Z]+")) {
+            System.out.println("Invalid first name. Please use letters only.");
             return null;
         }
 
@@ -78,6 +84,10 @@ public class RegistrationService {
 
         if (validation.isEmpty(lastName)) {
             System.out.println("Last name cannot be empty.");
+            return null;
+        }
+        if (!lastName.matches("[a-zA-Z]+")) {
+            System.out.println("Invalid last name. Please use letters only.");
             return null;
         }
 

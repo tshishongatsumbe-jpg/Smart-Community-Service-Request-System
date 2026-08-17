@@ -175,7 +175,17 @@ public class ResidentMenu {
         }
 
         System.out.print("Enter Description of the service type you just choose: ");
-        String description = scanner.nextLine();
+        String description = scanner.nextLine().trim();
+
+        if (description.isEmpty()) {
+            System.out.println("Description cannot be empty.");
+            return;
+        }
+
+        if (!description.matches(".*[a-zA-Z].*")) {
+            System.out.println("Invalid description. Please enter a description containing letters.");
+            return;
+        }
 
         Report report = reportService.createReport(
                 title,
