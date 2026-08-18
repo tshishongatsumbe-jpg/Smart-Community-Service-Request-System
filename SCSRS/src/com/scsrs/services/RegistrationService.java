@@ -34,6 +34,21 @@ public class RegistrationService {
         this.validation = validation;
         this.scanner = scanner;
     }
+    // ==========================
+    // Helper Methods
+    // ==========================
+
+    private String capitalizeName(String name) {
+
+        name = name.trim();
+
+        if (name.isEmpty()) {
+            return name;
+        }
+
+        return name.substring(0, 1).toUpperCase()
+                + name.substring(1).toLowerCase();
+    }
 
     // ==========================
     // Register Resident
@@ -44,6 +59,7 @@ public class RegistrationService {
      *
      * @return Newly created Resident, or null if registration failed.
      */
+
     public Resident createResidentAccount() {
 
         System.out.println("\n==================================================");
@@ -64,9 +80,8 @@ public class RegistrationService {
         System.out.println();
 
         // First Name
-        // First Name
         System.out.print("Enter First Name: ");
-        String firstName = scanner.nextLine().trim();
+        String firstName = capitalizeName(scanner.nextLine());
 
         if (validation.isEmpty(firstName)) {
             System.out.println("First name cannot be empty.");
@@ -80,7 +95,7 @@ public class RegistrationService {
 
         // Last Name
         System.out.print("Enter Last Name: ");
-        String lastName = scanner.nextLine().trim();
+        String lastName = capitalizeName(scanner.nextLine());
 
         if (validation.isEmpty(lastName)) {
             System.out.println("Last name cannot be empty.");
