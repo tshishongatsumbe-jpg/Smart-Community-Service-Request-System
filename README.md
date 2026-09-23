@@ -111,7 +111,7 @@ Residents can report problems in the following categories:
 * Roads
 * Sanitation
 * Waste
-* Street Lights
+* Streetlights
 * Other
 
 These categories are represented using the `ReportCategory` enum.
@@ -414,15 +414,15 @@ The system has a base `User` class.
 Other user types inherit from it:
 
 ```java
-public class Resident extends User
+public class Resident extends User{}
 ```
 
 ```java
-public class Administrator extends User
+public class Administrator extends User{}
 ```
 
 ```java
-public class FieldWorker extends User
+public class FieldWorker extends User{}
 ```
 
 This allows common user information and behaviour to be defined once in `User`.
@@ -436,7 +436,7 @@ Polymorphism is demonstrated through overridden methods.
 For example, the `User` class has:
 
 ```java
-public void displayRole()
+public void displayRole();
 ```
 
 The subclasses provide their own implementations.
@@ -575,7 +575,7 @@ The `Validation` utility class provides reusable validation methods.
 ### Email
 
 ```java
-isValidEmail()
+isValidEmail{}
 ```
 
 Checks that the email contains the required email components.
@@ -583,7 +583,7 @@ Checks that the email contains the required email components.
 ### Phone Number
 
 ```java
-isValidPhoneNumber()
+isValidPhoneNumber();
 ```
 
 Checks that the phone number contains exactly 10 digits.
@@ -591,7 +591,7 @@ Checks that the phone number contains exactly 10 digits.
 ### Password
 
 ```java
-isValidPassword()
+isValidPassword();
 ```
 
 Checks that the password contains at least 6 characters.
@@ -599,7 +599,7 @@ Checks that the password contains at least 6 characters.
 ### Empty Input
 
 ```java
-isEmpty()
+isEmpty();
 ```
 
 Checks whether input is empty or null.
@@ -615,7 +615,7 @@ The project includes a `FileManager` class for saving reports.
 Reports can be written to a file using:
 
 ```java
-saveReports(ArrayList<Report> reports, String fileName)
+saveReports(ArrayList<Report> reports, String fileName);
 ```
 
 The reports are written using `BufferedWriter` and `FileWriter`.

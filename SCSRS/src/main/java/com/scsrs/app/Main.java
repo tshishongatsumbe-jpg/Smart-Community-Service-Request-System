@@ -148,10 +148,6 @@ public class Main {
     // Create Default Users
     // ==========================
 
-    // ==========================
-    // Create Default Users
-    // ==========================
-
     /**
      * Creates default users for testing.
      */

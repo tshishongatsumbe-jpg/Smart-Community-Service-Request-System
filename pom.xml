@@ -7,22 +7,19 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Project information -->
     <groupId>com.scsrs</groupId>
     <artifactId>smart-community-service-request-system</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <name>Smart Community Service Request System</name>
-    <description>Java-based Smart Community Service Request System</description>
+    <description>Smart Community Service Request System</description>
 
-    <!-- Java version -->
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <!-- Dependencies -->
     <dependencies>
 
         <!-- JUnit 5 -->
@@ -35,8 +32,14 @@
 
     </dependencies>
 
-    <!-- Build configuration -->
     <build>
+
+        <!-- Java source code is inside SCSRS -->
+        <sourceDirectory>SCSRS/src/main/java</sourceDirectory>
+
+        <!-- Tests are inside SCSRS -->
+        <testSourceDirectory>SCSRS/src/test/java</testSourceDirectory>
+
         <plugins>
 
             <!-- Java compiler -->
@@ -50,17 +53,17 @@
                 </configuration>
             </plugin>
 
-            <!-- Run the application with Maven -->
+            <!-- Run the application -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <mainClass>com.scsrs.Main</mainClass>
+                    <mainClass>com.scsrs.app.Main</mainClass>
                 </configuration>
             </plugin>
 
-            <!-- Run JUnit 5 tests -->
+            <!-- JUnit 5 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -68,6 +71,8 @@
             </plugin>
 
         </plugins>
+
     </build>
 
 </project>
+
